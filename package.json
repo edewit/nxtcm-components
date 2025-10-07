@@ -1,0 +1,37 @@
+{
+    "name": "nxtcm-components",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "start": "webpack serve --mode development",
+        "build": "webpack --mode production",
+        "type-check": "tsc --noEmit",
+        "prettier:fix": "prettier --write '{src,cypress,scripts}/**/*.{js,ts,mjs,jsx,tsx}'"
+    },
+    "dependencies": {
+        "@patternfly/react-core": "^6.0.0",
+        "@patternfly/react-icons": "^6.3.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.22.10",
+        "@babel/preset-env": "^7.22.10",
+        "@babel/preset-react": "^7.22.5",
+        "@babel/preset-typescript": "^7.22.5",
+        "@types/react": "^18.2.18",
+        "@types/react-dom": "^18.2.7",
+        "babel-loader": "^9.1.3",
+        "css-loader": "^6.8.1",
+        "prettier": "^3.6.2",
+        "sass": "^1.93.2",
+        "sass-loader": "^16.0.5",
+        "style-loader": "^3.3.3",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.2.2",
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.15.1"
+    }
+}
