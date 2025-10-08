@@ -27,3 +27,6 @@ test-report.xml
 yalc.lock
 
 npm-debug.log*
+
+*storybook.log
+storybook-static
