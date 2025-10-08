@@ -9,8 +9,19 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "moduleResolution": "node",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "types": ["node", "jest", "@testing-library/jest-dom"]
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }
