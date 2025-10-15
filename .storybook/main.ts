@@ -24,6 +24,14 @@ const config: StorybookConfig = {
         },
       },
     });
+    // Add SCSS support (only for .scss files, let Storybook handle .css)
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+    });
+    
   },
 };
 export default config;
