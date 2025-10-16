@@ -154,7 +154,7 @@ export const  PageHeader = <P,>({
                   style={{
                     paddingBottom: navigation ? "inherit" : undefined,
                     paddingTop: breadcrumbs
-                      ? "var(--pf-v5-c-page__main-breadcrumb--PaddingTop)"
+                      ? "var(--pf-v6-c-page__main-breadcrumb--PaddingTop)"
                       : undefined,
                   }}
                 >
@@ -241,7 +241,7 @@ export const  PageHeader = <P,>({
                           {clusterClaimName && (
                             <span
                               style={{
-                                color: "var(--pf-v5-global--Color--200)",
+                                color: "var(--pf-v6-global--Color--200)",
                               }}
                             >
                               {clusterClaimName}

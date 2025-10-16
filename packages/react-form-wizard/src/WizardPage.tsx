@@ -36,21 +36,8 @@ export function WizardPage(props: WizardPageProps) {
     })
   }, [])
   return (
-    <Page
-      breadcrumb={
-        props.breadcrumb && (
-          <Breadcrumb>
-            {props.breadcrumb.map((crumb) => (
-              <BreadcrumbItem key={crumb.label} to={crumb.to}>
-                {crumb.label}
-              </BreadcrumbItem>
-            ))}
-          </Breadcrumb>
-        )
-      }
-      isBreadcrumbGrouped
-      additionalGroupedContent={
-        <PageSection variant="default">
+    <div style={{height: '100vh'}}>
+       <PageSection variant="default" >
           <Flex alignItems={{ default: 'alignItemsCenter' }} wrap="noWrap" style={{ flexWrap: 'nowrap', gap: 16 }}>
             <Title headingLevel="h1">{props.title}</Title>
             {props.yaml !== false && (
@@ -64,14 +51,10 @@ export function WizardPage(props: WizardPageProps) {
           </Flex>
           {props.description && <Content component="small">{props.description}</Content>}
         </PageSection>
-      }
-      groupProps={{ stickyOnBreakpoint: { default: 'top' } }}
-    >
-      <PageSection type={PageSectionTypes.wizard} variant={PageSectionVariants.default}>
         <Wizard {...props} showHeader={false} showYaml={drawerExpanded} yamlEditor={yamlEditor}>
           {props.children}
         </Wizard>
-      </PageSection>
-    </Page>
+     
+    </div>
   )
 }

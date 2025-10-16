@@ -332,7 +332,7 @@ export function Catalog(props: {
     }, [searchedCards])
 
     return (
-        <Page>
+       <>
             <PageSection variant="default" isWidthLimited>
                 <Flex style={{ gap: 16 }}>
                     <FlexItem grow={{ default: 'grow' }}>
@@ -358,7 +358,7 @@ export function Catalog(props: {
                     <Button onClick={props.onBack}>Back</Button>
                 </PageSection>
             )}
-        </Page>
+       </>
     )
 }
 
