@@ -14,132 +14,158 @@ import {
   SplitItem,
   Title,
   MenuToggleElement,
-} from '@patternfly/react-core'
-import { ArrowDownIcon, ArrowUpIcon, ExclamationCircleIcon, PlusCircleIcon, TrashIcon } from '@patternfly/react-icons'
-import get from 'get-value'
-import { Fragment, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
-import { WizTextDetail } from '..'
-import { FieldGroup } from '../components/FieldGroup'
-import { WizHelperText } from '../components/WizHelperText'
-import { Indented } from '../components/Indented'
-import { LabelHelp } from '../components/LabelHelp'
-import { useData } from '../contexts/DataContext'
-import { useStringContext } from '../contexts/StringContext'
-import { DisplayMode } from '../contexts/DisplayModeContext'
-import { ItemContext } from '../contexts/ItemContext'
-import { ShowValidationContext } from '../contexts/ShowValidationProvider'
-import { HasValidationErrorContext, ValidationProvider } from '../contexts/ValidationProvider'
-import { getCollapsedPlaceholder, InputCommonProps, useInput } from './Input'
+} from "@patternfly/react-core";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ExclamationCircleIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@patternfly/react-icons";
+import get from "get-value";
+import {
+  Fragment,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { WizTextDetail } from "..";
+import { FieldGroup } from "../components/FieldGroup";
+import { WizHelperText } from "../components/WizHelperText";
+import { Indented } from "../components/Indented";
+import { LabelHelp } from "../components/LabelHelp";
+import { useData } from "../contexts/DataContext";
+import { useStringContext } from "../contexts/StringContext";
+import { DisplayMode } from "../contexts/DisplayModeContext";
+import { ItemContext } from "../contexts/ItemContext";
+import { ShowValidationContext } from "../contexts/ShowValidationProvider";
+import {
+  HasValidationErrorContext,
+  ValidationProvider,
+} from "../contexts/ValidationProvider";
+import { getCollapsedPlaceholder, InputCommonProps, useInput } from "./Input";
 
 export function wizardArrayItems(props: any, item: any) {
-  const id = props.id
-  const path = props.path !== undefined ? props.path : id
-  let sourceArray = get(item, path as string) as object[]
-  if (!Array.isArray(sourceArray)) sourceArray = []
-  let values = sourceArray
-  if (props.filter) values = values.filter(props.filter)
-  return values
+  const id = props.id;
+  const path = props.path !== undefined ? props.path : id;
+  let sourceArray = get(item, path as string) as object[];
+  if (!Array.isArray(sourceArray)) sourceArray = [];
+  let values = sourceArray;
+  if (props.filter) values = values.filter(props.filter);
+  return values;
 }
 
-export type WizArrayInputProps = Omit<InputCommonProps, 'path'> & {
-  path: string | null
-  children: ReactNode
-  filter?: (item: any) => boolean
-  dropdownItems?: { label: string; action: () => object }[]
-  placeholder?: string
-  collapsedContent: ReactNode
-  expandedContent?: ReactNode
-  collapsedPlaceholder?: ReactNode
-  sortable?: boolean
-  newValue?: object
-  defaultCollapsed?: boolean
-  disallowEmpty?: boolean
-  isSection?: boolean
-  summaryList?: boolean
-}
+export type WizArrayInputProps = Omit<InputCommonProps, "path"> & {
+  path: string | null;
+  children: ReactNode;
+  filter?: (item: any) => boolean;
+  dropdownItems?: { label: string; action: () => object }[];
+  placeholder?: string;
+  collapsedContent: ReactNode;
+  expandedContent?: ReactNode;
+  collapsedPlaceholder?: ReactNode;
+  sortable?: boolean;
+  newValue?: object;
+  defaultCollapsed?: boolean;
+  disallowEmpty?: boolean;
+  isSection?: boolean;
+  summaryList?: boolean;
+};
 
 export function WizArrayInput(props: WizArrayInputProps) {
-  const { displayMode: mode, value, setValue, hidden, id, required } = useInput(props as InputCommonProps)
-  const [open, setOpen] = useState(false)
-  const onToggle = useCallback(() => setOpen((open: boolean) => !open), [])
+  const {
+    displayMode: mode,
+    value,
+    setValue,
+    hidden,
+    id,
+    required,
+  } = useInput(props as InputCommonProps);
+  const [open, setOpen] = useState(false);
+  const onToggle = useCallback(() => setOpen((open: boolean) => !open), []);
 
-  const path = props.path
+  const path = props.path;
 
-  const { update } = useData()
-  const item = useContext(ItemContext)
-  const values = wizardArrayItems(props, item)
+  const { update } = useData();
+  const item = useContext(ItemContext);
+  const values = wizardArrayItems(props, item);
 
   const addItem = useCallback(
     (newItem: object | object[]) => {
       if (path === null) {
-        ;(item as any[]).push(newItem)
+        (item as any[]).push(newItem);
       } else {
-        let newArray = values
+        let newArray = values;
         if (Array.isArray(newItem)) {
-          newArray = [...newArray, ...newItem]
+          newArray = [...newArray, ...newItem];
         } else {
-          newArray.push(newItem as never)
+          newArray.push(newItem as never);
         }
-        setValue(newArray)
+        setValue(newArray);
       }
-      update()
+      update();
     },
     [item, path, setValue, update, values]
-  )
+  );
 
   if (!values.length && props.disallowEmpty) {
-    addItem(props.newValue ?? {})
+    addItem(props.newValue ?? {});
   }
 
   const removeItem = useCallback(
     (item: object) => {
-      const index = (value as Array<object>).indexOf(item)
+      const index = (value as Array<object>).indexOf(item);
       if (index !== -1) {
-        ;(value as Array<object>).splice(index, 1)
-        setValue(value)
+        (value as Array<object>).splice(index, 1);
+        setValue(value);
       }
     },
     [setValue, value]
-  )
+  );
 
   const moveUp = useCallback(
     (index: number) => {
-      const temp = value[index]
-      value[index] = value[index - 1]
-      value[index - 1] = temp
-      setValue(value)
+      const temp = value[index];
+      value[index] = value[index - 1];
+      value[index - 1] = temp;
+      setValue(value);
     },
     [setValue, value]
-  )
+  );
 
   const moveDown = useCallback(
     (index: number) => {
-      const temp = value[index]
-      value[index] = value[index + 1]
-      value[index + 1] = temp
-      setValue(value)
+      const temp = value[index];
+      value[index] = value[index + 1];
+      value[index + 1] = temp;
+      setValue(value);
     },
     [setValue, value]
-  )
+  );
 
-  const { actionAriaLabel } = useStringContext()
+  const { actionAriaLabel } = useStringContext();
 
-  if (hidden) return <Fragment />
+  if (hidden) return <Fragment />;
 
   if (mode === DisplayMode.Details) {
     if (values.length === 0) {
-      return <Fragment />
+      return <Fragment />;
     }
     if (props.isSection) {
       return (
         <Fragment>
           <Title headingLevel="h2">{props.label}</Title>
           <Indented id={id}>
-            <List style={{ marginTop: -4 }} isPlain={props.summaryList !== true}>
+            <List
+              style={{ marginTop: -4 }}
+              isPlain={props.summaryList !== true}
+            >
               {values.map((value, index) => (
                 <ListItem key={index} style={{ paddingBottom: 4 }}>
                   <ItemContext.Provider value={value}>
-                    {typeof props.collapsedContent === 'string' ? (
+                    {typeof props.collapsedContent === "string" ? (
                       <WizTextDetail
                         id={props.collapsedContent}
                         path={props.collapsedContent}
@@ -154,7 +180,7 @@ export function WizArrayInput(props: WizArrayInputProps) {
             </List>
           </Indented>
         </Fragment>
-      )
+      );
     }
     return (
       <Fragment>
@@ -164,7 +190,7 @@ export function WizArrayInput(props: WizArrayInputProps) {
             {values.map((value, index) => (
               <ListItem key={index} style={{ paddingBottom: 4 }}>
                 <ItemContext.Provider value={value}>
-                  {typeof props.collapsedContent === 'string' ? (
+                  {typeof props.collapsedContent === "string" ? (
                     <WizTextDetail
                       id={props.collapsedContent}
                       path={props.collapsedContent}
@@ -179,7 +205,7 @@ export function WizArrayInput(props: WizArrayInputProps) {
           </List>
         </Indented>
       </Fragment>
-    )
+    );
   }
   return (
     <div id={id} className="form-wizard-array-input">
@@ -189,14 +215,24 @@ export function WizArrayInput(props: WizArrayInputProps) {
             <Split hasGutter style={{ paddingBottom: 8 }}>
               <span className="pf-v6-c-form__section-title">{props.label}</span>
               {props.labelHelp && (
-                <LabelHelp id={id} labelHelp={props.labelHelp} labelHelpTitle={props.labelHelpTitle} />
+                <LabelHelp
+                  id={id}
+                  labelHelp={props.labelHelp}
+                  labelHelpTitle={props.labelHelpTitle}
+                />
               )}
             </Split>
           ) : (
             <div>
-              <span className="pf-v6-c-form__label pf-v6-c-form__label-text">{props.label}</span>
+              <span className="pf-v6-c-form__label pf-v6-c-form__label-text">
+                {props.label}
+              </span>
               {props.labelHelp && (
-                <LabelHelp id={id} labelHelp={props.labelHelp} labelHelpTitle={props.labelHelpTitle} />
+                <LabelHelp
+                  id={id}
+                  labelHelp={props.labelHelp}
+                  labelHelpTitle={props.labelHelpTitle}
+                />
               )}
             </div>
           )}
@@ -226,11 +262,18 @@ export function WizArrayInput(props: WizArrayInputProps) {
             >
               {props.children}
             </ArrayInputItem>
-          )
+          );
         })
       )}
       {props.placeholder && (
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, paddingTop: values.length ? 8 : 4 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: 8,
+            paddingTop: values.length ? 8 : 4,
+          }}
+        >
           {!props.dropdownItems ? (
             <Button
               id="add-button"
@@ -247,21 +290,30 @@ export function WizArrayInput(props: WizArrayInputProps) {
               isOpen={open}
               onOpenChange={setOpen}
               toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                <MenuToggle ref={toggleRef} onClick={onToggle} variant="plainText">
-                  <Button icon={<PlusCircleIcon />} iconPosition="left" variant="link" size="sm">
+                <MenuToggle
+                  ref={toggleRef}
+                  onClick={onToggle}
+                  variant="plainText"
+                >
+                  <Button
+                    icon={<PlusCircleIcon />}
+                    iconPosition="left"
+                    variant="link"
+                    size="sm"
+                  >
                     {props.placeholder}
                   </Button>
                 </MenuToggle>
               )}
-              popperProps={{ position: 'left' }}
+              popperProps={{ position: "left" }}
             >
               <DropdownList>
                 {props.dropdownItems.map((item, index) => (
                   <DropdownItem
                     key={index}
                     onClick={() => {
-                      addItem(item.action())
-                      setOpen(false)
+                      addItem(item.action());
+                      setOpen(false);
                     }}
                   >
                     {item.label}
@@ -273,30 +325,42 @@ export function WizArrayInput(props: WizArrayInputProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export function ArrayInputItem(props: {
-  id: string
-  value: object
-  index: number
-  count: number
-  children: ReactNode
-  defaultExpanded?: boolean
-  collapsedContent: ReactNode
-  expandedContent?: ReactNode
-  collapsedPlaceholder?: ReactNode
-  sortable?: boolean
-  required?: boolean
-  moveUp: (index: number) => void
-  moveDown: (index: number) => void
-  removeItem: (value: object) => void
+  id: string;
+  value: object;
+  index: number;
+  count: number;
+  children: ReactNode;
+  defaultExpanded?: boolean;
+  collapsedContent: ReactNode;
+  expandedContent?: ReactNode;
+  collapsedPlaceholder?: ReactNode;
+  sortable?: boolean;
+  required?: boolean;
+  moveUp: (index: number) => void;
+  moveDown: (index: number) => void;
+  removeItem: (value: object) => void;
 }) {
-  const { id, value, index, defaultExpanded, moveUp, moveDown, removeItem, count, required } = props
-  const [expanded, setExpanded] = useState(defaultExpanded !== undefined ? defaultExpanded : true)
+  const {
+    id,
+    value,
+    index,
+    defaultExpanded,
+    moveUp,
+    moveDown,
+    removeItem,
+    count,
+    required,
+  } = props;
+  const [expanded, setExpanded] = useState(
+    defaultExpanded !== undefined ? defaultExpanded : true
+  );
 
   const collapsedContent = useMemo(() => {
-    return typeof props.collapsedContent === 'string' ? (
+    return typeof props.collapsedContent === "string" ? (
       <WizTextDetail
         id={props.collapsedContent}
         path={props.collapsedContent}
@@ -304,19 +368,22 @@ export function ArrayInputItem(props: {
       />
     ) : (
       props.collapsedContent
-    )
-  }, [props])
+    );
+  }, [props]);
 
   const expandedContent = useMemo(() => {
     if (props.expandedContent) {
-      return typeof props.expandedContent === 'string' ? (
-        <WizTextDetail id={props.expandedContent} path={props.expandedContent} />
+      return typeof props.expandedContent === "string" ? (
+        <WizTextDetail
+          id={props.expandedContent}
+          path={props.expandedContent}
+        />
       ) : (
         props.expandedContent
-      )
+      );
     }
-    return collapsedContent
-  }, [collapsedContent, props.expandedContent])
+    return collapsedContent;
+  }, [collapsedContent, props.expandedContent]);
 
   const {
     detailsAriaLabel,
@@ -324,7 +391,7 @@ export function ArrayInputItem(props: {
     sortableMoveItemDownAriaLabel,
     sortableMoveItemUpAriaLabel,
     removeItemAriaLabel,
-  } = useStringContext()
+  } = useStringContext();
 
   return (
     <ValidationProvider>
@@ -334,7 +401,7 @@ export function ArrayInputItem(props: {
             {(hasErrors) => (
               <ItemContext.Provider value={value}>
                 <FieldGroup
-                  id={id + '-' + (index + 1).toString()}
+                  id={id + "-" + (index + 1).toString()}
                   isExpanded={expanded}
                   setIsExpanded={setExpanded}
                   toggleAriaLabel={detailsAriaLabel}
@@ -402,7 +469,11 @@ export function ArrayInputItem(props: {
                 >
                   <Split>
                     <SplitItem isFilled>
-                      {expanded ? <Fragment>{expandedContent}</Fragment> : <Fragment>{collapsedContent}</Fragment>}
+                      {expanded ? (
+                        <Fragment>{expandedContent}</Fragment>
+                      ) : (
+                        <Fragment>{collapsedContent}</Fragment>
+                      )}
                     </SplitItem>
                     <SplitItem>
                       {props.sortable && (
@@ -445,5 +516,5 @@ export function ArrayInputItem(props: {
         )}
       </ShowValidationContext.Consumer>
     </ValidationProvider>
-  )
+  );
 }

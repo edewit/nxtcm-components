@@ -7,58 +7,67 @@ import {
   InputGroupItem,
   MenuToggleElement,
   Select as PfSelect,
-} from '@patternfly/react-core'
-import { ReactNode, useCallback, useState } from 'react'
-import { DisplayMode } from '../contexts/DisplayModeContext'
-import { useStringContext } from '../contexts/StringContext'
-import { InputCommonProps, getSelectPlaceholder, useInput } from './Input'
-import { InputSelect, SelectListOptions } from './InputSelect'
-import { WizFormGroup } from './WizFormGroup'
+} from "@patternfly/react-core";
+import { ReactNode, useCallback, useState } from "react";
+import { DisplayMode } from "../contexts/DisplayModeContext";
+import { useStringContext } from "../contexts/StringContext";
+import { InputCommonProps, getSelectPlaceholder, useInput } from "./Input";
+import { InputSelect, SelectListOptions } from "./InputSelect";
+import { WizFormGroup } from "./WizFormGroup";
 
-import './Select.css'
+import "./Select.css";
 
 export type WizSingleSelectProps = InputCommonProps<string> & {
-  label: string
-  placeholder?: string
-  isCreatable?: boolean
-  footer?: ReactNode
-  options: string[]
-}
+  label: string;
+  placeholder?: string;
+  isCreatable?: boolean;
+  footer?: ReactNode;
+  options: string[];
+};
 
 export function WizSingleSelect(props: WizSingleSelectProps) {
-  const { displayMode: mode, value, setValue, validated, hidden, id, disabled, required } = useInput(props)
-  const { noResults } = useStringContext()
-  const { label, readonly, isCreatable, options, footer } = props
-  const placeholder = getSelectPlaceholder(props)
-  const [open, setOpen] = useState(false)
-  const [filteredOptions, setFilteredOptions] = useState<string[]>([])
+  const {
+    displayMode: mode,
+    value,
+    setValue,
+    validated,
+    hidden,
+    id,
+    disabled,
+    required,
+  } = useInput(props);
+  const { noResults } = useStringContext();
+  const { label, readonly, isCreatable, options, footer } = props;
+  const placeholder = getSelectPlaceholder(props);
+  const [open, setOpen] = useState(false);
+  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
   const onSelect = useCallback(
     (selectedString: string | undefined) => {
-      setValue(selectedString)
-      setOpen(false)
+      setValue(selectedString);
+      setOpen(false);
     },
     [setValue]
-  )
+  );
 
   const handleSetOptions = useCallback((o: string[]) => {
     if (o.length > 0) {
-      setFilteredOptions(o)
+      setFilteredOptions(o);
     } else {
-      setFilteredOptions([noResults])
+      setFilteredOptions([noResults]);
     }
-  }, [])
+  }, []);
 
-  if (hidden) return null
+  if (hidden) return null;
 
   if (mode === DisplayMode.Details) {
-    if (!value) return null
+    if (!value) return null;
     return (
       <DescriptionListGroup>
         <DescriptionListTerm>{label}</DescriptionListTerm>
         <DescriptionListDescription id={id}>{value}</DescriptionListDescription>
       </DescriptionListGroup>
-    )
+    );
   }
 
   return (
@@ -69,7 +78,7 @@ export function WizSingleSelect(props: WizSingleSelectProps) {
             <PfSelect
               isOpen={open}
               onOpenChange={(isOpen) => {
-                !isOpen && setOpen(false)
+                !isOpen && setOpen(false);
               }}
               toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                 <InputSelect
@@ -87,13 +96,18 @@ export function WizSingleSelect(props: WizSingleSelectProps) {
                 />
               )}
               selected={value}
-              onSelect={(_event, value) => onSelect(value?.toString() ?? '')}
+              onSelect={(_event, value) => onSelect(value?.toString() ?? "")}
             >
-              <SelectListOptions value={value} options={filteredOptions} isCreatable={isCreatable} footer={footer} />
+              <SelectListOptions
+                value={value}
+                options={filteredOptions}
+                isCreatable={isCreatable}
+                footer={footer}
+              />
             </PfSelect>
           </InputGroupItem>
         </InputGroup>
       </WizFormGroup>
     </div>
-  )
+  );
 }

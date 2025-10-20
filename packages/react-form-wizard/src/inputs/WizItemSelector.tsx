@@ -1,28 +1,32 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import get from 'get-value'
-import { Fragment, ReactNode, useContext } from 'react'
-import { ItemContext } from '../contexts/ItemContext'
+import get from "get-value";
+import { Fragment, ReactNode, useContext } from "react";
+import { ItemContext } from "../contexts/ItemContext";
 
 export function wizardSelectorItem(props: any, item: any[]) {
   return item.find((i) => {
-    return get(i, props.selectKey) === props.selectValue
-  })
+    return get(i, props.selectKey) === props.selectValue;
+  });
 }
 
 export function WizItemSelector(props: {
-  selectKey: string
-  selectValue: string
-  children?: ReactNode
-  empty?: ReactNode
+  selectKey: string;
+  selectValue: string;
+  children?: ReactNode;
+  empty?: ReactNode;
 }) {
-  const item = useContext(ItemContext)
-  if (!Array.isArray(item)) return <Fragment>Input must be an array!</Fragment>
+  const item = useContext(ItemContext);
+  if (!Array.isArray(item)) return <Fragment>Input must be an array!</Fragment>;
 
-  const newItem = wizardSelectorItem(props, item)
+  const newItem = wizardSelectorItem(props, item);
   if (newItem === undefined) {
-    if (props.empty) return <Fragment>{props.empty}</Fragment>
-    return <Fragment></Fragment>
+    if (props.empty) return <Fragment>{props.empty}</Fragment>;
+    return <Fragment></Fragment>;
   }
 
-  return <ItemContext.Provider value={newItem}>{props.children}</ItemContext.Provider>
+  return (
+    <ItemContext.Provider value={newItem}>
+      {props.children}
+    </ItemContext.Provider>
+  );
 }

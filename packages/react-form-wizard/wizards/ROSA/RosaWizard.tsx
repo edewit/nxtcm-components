@@ -6,7 +6,6 @@ import {
   Section,
   WizSelect,
   Step,
-  Tile,
   WizTiles,
   WizTimeRange,
   WizardCancel,
@@ -14,6 +13,7 @@ import {
   WizardSubmit,
   WizCheckbox,
   WizTextInput,
+  ExpandableStep
 } from '../../src'
 
 export function RosaWizard(props: { onSubmit: WizardSubmit; onCancel: WizardCancel }) {
@@ -251,6 +251,18 @@ export function RosaWizard(props: { onSubmit: WizardSubmit; onCancel: WizardCanc
         </Section>
       </Step>
 
+      <ExpandableStep id="expand" label="EXPAND" isExpandable steps={[
+        <Step id="inside1" label="inside1" key="14"><p>TESTING</p></Step>,
+        <Step id="inside2" label="inside2" key="15"><p>TESTING33</p></Step>,
+        <Step id="inside3" label="inside3" key="16"><p>TESTING22</p></Step>
+      ]} />
+
+      <ExpandableStep id="expand2" label="EXPAND2" isExpandable steps={[
+        <Step id="inside4" label="inside4" key="1"><p>TESTING</p></Step>,
+        <Step id="inside5" label="inside5" key="12"><p>TESTING34</p></Step>,
+        <Step id="inside6" label="inside6" key="13"><p>TESTING25</p></Step>
+      ]} />
+      
       <Step label="Provisioning mode" id="provisioning-mode">
         <Section
           label="Provisioning mode"
@@ -258,7 +270,7 @@ export function RosaWizard(props: { onSubmit: WizardSubmit; onCancel: WizardCanc
           description="Choose the prefered mode for creating operator roles and OIDC provider."
         >
           <WizTiles id="creation-mode" path="creationMode">
-            <Tile
+            {/* <Tile
               id="manual"
               value="manual"
               label="Manual"
@@ -269,7 +281,7 @@ export function RosaWizard(props: { onSubmit: WizardSubmit; onCancel: WizardCanc
               value="automatic"
               label="Automatic"
               description="Clusters will be automatically updared beased on your defined day and start time when new versions are available."
-            />
+            /> */}
           </WizTiles>
         </Section>
       </Step>

@@ -17,17 +17,17 @@
 // Import commands.js using ES2015 syntax:
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-import '@cypress/code-coverage/support'
-import './commands'
+import "@cypress/code-coverage/support";
+import "./commands";
 
 declare global {
-    namespace Cypress {
-        interface Chainable {
-            /**
-             * Custom command to select DOM element by data-cy attribute.
-             * @example cy.dataCy('greeting')
-             */
-            multiselect(value: string): Chainable<Element>
-        }
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Custom command to select DOM element by data-cy attribute.
+       * @example cy.dataCy('greeting')
+       */
+      multiselect(value: string): Chainable<Element>;
     }
+  }
 }

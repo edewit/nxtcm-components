@@ -5,64 +5,72 @@ import {
   DescriptionListTerm,
   MenuToggleElement,
   Select as PfSelect,
-} from '@patternfly/react-core'
-import { ReactNode, useCallback, useState } from 'react'
-import { DisplayMode } from '../contexts/DisplayModeContext'
-import { useStringContext } from '../contexts/StringContext'
-import { InputCommonProps, getSelectPlaceholder, useInput } from './Input'
-import { InputSelect, SelectListOptions } from './InputSelect'
-import { WizFormGroup } from './WizFormGroup'
+} from "@patternfly/react-core";
+import { ReactNode, useCallback, useState } from "react";
+import { DisplayMode } from "../contexts/DisplayModeContext";
+import { useStringContext } from "../contexts/StringContext";
+import { InputCommonProps, getSelectPlaceholder, useInput } from "./Input";
+import { InputSelect, SelectListOptions } from "./InputSelect";
+import { WizFormGroup } from "./WizFormGroup";
 
-import './Select.css'
+import "./Select.css";
 
 export type WizMultiSelectProps = InputCommonProps<string[]> & {
-  placeholder?: string
-  footer?: ReactNode
-  label: string
-  isCreatable?: boolean
-  options: string[]
-}
+  placeholder?: string;
+  footer?: ReactNode;
+  label: string;
+  isCreatable?: boolean;
+  options: string[];
+};
 
 export function WizMultiSelect(props: WizMultiSelectProps) {
-  const { displayMode: mode, value, setValue, validated, hidden, id, disabled } = useInput(props)
-  const { noResults } = useStringContext()
-  const { isCreatable, options, footer } = props
-  const placeholder = getSelectPlaceholder(props)
-  const [open, setOpen] = useState(false)
-  const [filteredOptions, setFilteredOptions] = useState<string[]>([])
+  const {
+    displayMode: mode,
+    value,
+    setValue,
+    validated,
+    hidden,
+    id,
+    disabled,
+  } = useInput(props);
+  const { noResults } = useStringContext();
+  const { isCreatable, options, footer } = props;
+  const placeholder = getSelectPlaceholder(props);
+  const [open, setOpen] = useState(false);
+  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
   const handleSetOptions = useCallback((o: string[]) => {
     if (o.length > 0) {
-      setFilteredOptions(o)
+      setFilteredOptions(o);
     } else {
-      setFilteredOptions([noResults])
+      setFilteredOptions([noResults]);
     }
-  }, [])
+  }, []);
 
   const onSelect = useCallback(
     (selectedString: string | undefined) => {
       if (!selectedString) {
-        setValue([])
-        return
+        setValue([]);
+        return;
       }
 
-      let newValues: any[]
-      if (Array.isArray(value)) newValues = [...value]
-      else newValues = []
+      let newValues: any[];
+      if (Array.isArray(value)) newValues = [...value];
+      else newValues = [];
       if (newValues.includes(selectedString)) {
-        newValues = newValues.filter((value) => value !== selectedString)
+        newValues = newValues.filter((value) => value !== selectedString);
       } else {
-        newValues.push(selectedString)
+        newValues.push(selectedString);
       }
-      setValue(newValues)
+      setValue(newValues);
     },
     [setValue, value]
-  )
+  );
 
-  if (hidden) return null
+  if (hidden) return null;
 
   if (mode === DisplayMode.Details) {
-    if (!value) return null
+    if (!value) return null;
     return (
       <DescriptionListGroup>
         <DescriptionListTerm>{props.label}</DescriptionListTerm>
@@ -70,7 +78,9 @@ export function WizMultiSelect(props: WizMultiSelectProps) {
           {value.length > 5 ? (
             `${value.length as string} selected`
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 8 }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", rowGap: 8 }}
+            >
               {(value as string[]).map((selection, index) => (
                 <div key={index}>{selection}</div>
               ))}
@@ -78,7 +88,7 @@ export function WizMultiSelect(props: WizMultiSelectProps) {
           )}
         </DescriptionListDescription>
       </DescriptionListGroup>
-    )
+    );
   }
 
   return (
@@ -86,7 +96,7 @@ export function WizMultiSelect(props: WizMultiSelectProps) {
       <WizFormGroup {...props}>
         <PfSelect
           onOpenChange={(isOpen) => {
-            !isOpen && setOpen(false)
+            !isOpen && setOpen(false);
           }}
           isOpen={open}
           toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
@@ -104,7 +114,7 @@ export function WizMultiSelect(props: WizMultiSelectProps) {
             />
           )}
           selected={value}
-          onSelect={(_event, value) => onSelect(value?.toString() ?? '')}
+          onSelect={(_event, value) => onSelect(value?.toString() ?? "")}
         >
           <SelectListOptions
             value={value}
@@ -116,5 +126,5 @@ export function WizMultiSelect(props: WizMultiSelectProps) {
         </PfSelect>
       </WizFormGroup>
     </div>
-  )
+  );
 }

@@ -1,16 +1,21 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import { Fragment, ReactNode } from 'react'
-import { useValue } from './Input'
+import { Fragment, ReactNode } from "react";
+import { useValue } from "./Input";
 
-export function WizItemText(props: { id?: string; path: string; placeholder?: ReactNode; isHorizontal?: boolean }) {
-  const [value] = useValue(props, '')
+export function WizItemText(props: {
+  id?: string;
+  path: string;
+  placeholder?: ReactNode;
+  isHorizontal?: boolean;
+}) {
+  const [value] = useValue(props, "");
 
   if (!value && props.placeholder) {
-    return <span style={{ opacity: 0.7 }}>{props.placeholder}</span>
+    return <span style={{ opacity: 0.7 }}>{props.placeholder}</span>;
   }
 
   if (value === undefined) {
-    return <Fragment />
+    return <Fragment />;
   }
 
   if (Array.isArray(value)) {
@@ -18,13 +23,13 @@ export function WizItemText(props: { id?: string; path: string; placeholder?: Re
       <Fragment>
         {value.map((v, index) => (
           <span key={v}>
-            {index !== 0 ? ', ' : ''}
+            {index !== 0 ? ", " : ""}
             {v}
           </span>
         ))}
       </Fragment>
-    )
+    );
   }
 
-  return <Fragment>{value}</Fragment>
+  return <Fragment>{value}</Fragment>;
 }

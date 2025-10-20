@@ -1,20 +1,35 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import { createContext, ReactNode, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { useItem } from './ItemContext'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { useItem } from "./ItemContext";
 
 // Function to set if a step should show validation
-const StepSetShowValidationContext = createContext<(id: string, has: boolean) => void>(() => null)
-StepSetShowValidationContext.displayName = 'StepSetShowValidationContext'
-export const useSetStepShowValidation = () => useContext(StepSetShowValidationContext)
+const StepSetShowValidationContext = createContext<
+  (id: string, has: boolean) => void
+>(() => null);
+StepSetShowValidationContext.displayName = "StepSetShowValidationContext";
+export const useSetStepShowValidation = () =>
+  useContext(StepSetShowValidationContext);
 
 // Record of step id to boolean indicating is a step should show validation
-const StepShowValidationContext = createContext<Record<string, boolean>>({})
-StepShowValidationContext.displayName = 'StepShowValidationContext'
-export const useStepShowValidation = () => useContext(StepShowValidationContext)
+const StepShowValidationContext = createContext<Record<string, boolean>>({});
+StepShowValidationContext.displayName = "StepShowValidationContext";
+export const useStepShowValidation = () =>
+  useContext(StepShowValidationContext);
 
 export function StepShowValidationProvider(props: { children: ReactNode }) {
-  const [hasStepInputs, setHasStepInputsState] = useState<Record<string, true>>({})
-  const [setShowValidation, setShowValidationFunction] = useState<() => void>(() => () => null)
+  const [hasStepInputs, setHasStepInputsState] = useState<Record<string, true>>(
+    {}
+  );
+  const [setShowValidation, setShowValidationFunction] = useState<() => void>(
+    () => () => null
+  );
 
   // refreshStepInputs
   // - resets validation state to {}
@@ -24,31 +39,33 @@ export function StepShowValidationProvider(props: { children: ReactNode }) {
   // - which causes a useEffect to run in each step
   // - which call useSetStepShowValidation() with the step state
   const refreshStepShowValidation = useCallback(() => {
-    setHasStepInputsState({})
+    setHasStepInputsState({});
     setShowValidationFunction(() => (id: string, has: boolean) => {
       setHasStepInputsState((state) => {
         if (has && state[id] !== true) {
-          state = { ...state }
-          state[id] = true
+          state = { ...state };
+          state[id] = true;
         } else if (!has && state[id] !== undefined) {
-          state = { ...state }
-          delete state[id]
+          state = { ...state };
+          delete state[id];
         }
-        return state
-      })
-    })
-  }, [])
+        return state;
+      });
+    });
+  }, []);
 
   // When item changes
   // - call refreshStepShowValidation()
-  const item = useItem()
+  const item = useItem();
   useLayoutEffect(() => {
-    refreshStepShowValidation()
-  }, [item, refreshStepShowValidation])
+    refreshStepShowValidation();
+  }, [item, refreshStepShowValidation]);
 
   return (
     <StepSetShowValidationContext.Provider value={setShowValidation}>
-      <StepShowValidationContext.Provider value={hasStepInputs}>{props.children}</StepShowValidationContext.Provider>
+      <StepShowValidationContext.Provider value={hasStepInputs}>
+        {props.children}
+      </StepShowValidationContext.Provider>
     </StepSetShowValidationContext.Provider>
-  )
+  );
 }

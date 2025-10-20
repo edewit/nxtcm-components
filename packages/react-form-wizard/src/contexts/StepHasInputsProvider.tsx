@@ -1,18 +1,31 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import { createContext, ReactNode, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { useItem } from './ItemContext'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { useItem } from "./ItemContext";
 
-const StepSetHasInputsContext = createContext<(id: string, has: boolean) => void>(() => null)
-StepSetHasInputsContext.displayName = 'StepSetHasInputsContext'
-export const useSetStepHasInputs = () => useContext(StepSetHasInputsContext)
+const StepSetHasInputsContext = createContext<
+  (id: string, has: boolean) => void
+>(() => null);
+StepSetHasInputsContext.displayName = "StepSetHasInputsContext";
+export const useSetStepHasInputs = () => useContext(StepSetHasInputsContext);
 
-const StepHasInputsContext = createContext<Record<string, boolean>>({})
-StepHasInputsContext.displayName = 'StepHasInputsContext'
-export const useStepHasInputs = () => useContext(StepHasInputsContext)
+const StepHasInputsContext = createContext<Record<string, boolean>>({});
+StepHasInputsContext.displayName = "StepHasInputsContext";
+export const useStepHasInputs = () => useContext(StepHasInputsContext);
 
 export function StepHasInputsProvider(props: { children: ReactNode }) {
-  const [hasStepInputs, setHasStepInputsState] = useState<Record<string, true>>({})
-  const [setHasInputs, setHasInputsFunction] = useState<() => void>(() => () => null)
+  const [hasStepInputs, setHasStepInputsState] = useState<Record<string, true>>(
+    {}
+  );
+  const [setHasInputs, setHasInputsFunction] = useState<() => void>(
+    () => () => null
+  );
 
   // refreshStepInputs
   // - resets validation state to {}
@@ -22,31 +35,33 @@ export function StepHasInputsProvider(props: { children: ReactNode }) {
   // - which causes a useEffect to run in each step
   // - which call useSetStepHasInputs() with the step state
   const refreshStepInputs = useCallback(() => {
-    setHasStepInputsState({})
+    setHasStepInputsState({});
     setHasInputsFunction(() => (id: string, has: boolean) => {
       setHasStepInputsState((state) => {
         if (has && state[id] !== true) {
-          state = { ...state }
-          state[id] = true
+          state = { ...state };
+          state[id] = true;
         } else if (!has && state[id] !== undefined) {
-          state = { ...state }
-          delete state[id]
+          state = { ...state };
+          delete state[id];
         }
-        return state
-      })
-    })
-  }, [])
+        return state;
+      });
+    });
+  }, []);
 
   // When item changes
   // - call refreshStepInputs()
-  const item = useItem()
+  const item = useItem();
   useLayoutEffect(() => {
-    refreshStepInputs()
-  }, [item, refreshStepInputs])
+    refreshStepInputs();
+  }, [item, refreshStepInputs]);
 
   return (
     <StepSetHasInputsContext.Provider value={setHasInputs}>
-      <StepHasInputsContext.Provider value={hasStepInputs}>{props.children}</StepHasInputsContext.Provider>
+      <StepHasInputsContext.Provider value={hasStepInputs}>
+        {props.children}
+      </StepHasInputsContext.Provider>
     </StepSetHasInputsContext.Provider>
-  )
+  );
 }

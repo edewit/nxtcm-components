@@ -1,17 +1,17 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import { PropsWithChildren } from 'react'
-import { LabelHelp } from '../components/LabelHelp'
-import { InputCommonProps, convertId } from './Input'
-import { FormGroup } from '@patternfly/react-core'
-import { WizHelperText } from '../components/WizHelperText'
+import { PropsWithChildren } from "react";
+import { LabelHelp } from "../components/LabelHelp";
+import { InputCommonProps, convertId } from "./Input";
+import { FormGroup } from "@patternfly/react-core";
+import { WizHelperText } from "../components/WizHelperText";
 
 type WizFormGroupProps = InputCommonProps & {
-  noHelperText?: boolean
-}
+  noHelperText?: boolean;
+};
 
 export function WizFormGroup(props: PropsWithChildren<WizFormGroupProps>) {
-  const { noHelperText } = props
-  const id = convertId(props)
+  const { noHelperText } = props;
+  const id = convertId(props);
   return (
     <FormGroup
       id={`${id}-form-group`}
@@ -19,10 +19,16 @@ export function WizFormGroup(props: PropsWithChildren<WizFormGroupProps>) {
       fieldId={id}
       label={props.label}
       isRequired={props.required}
-      labelHelp={<LabelHelp id={id} labelHelp={props.labelHelp} labelHelpTitle={props.labelHelpTitle} />}
+      labelHelp={
+        <LabelHelp
+          id={id}
+          labelHelp={props.labelHelp}
+          labelHelpTitle={props.labelHelpTitle}
+        />
+      }
     >
       {props.children}
       {!noHelperText && <WizHelperText {...props} />}
     </FormGroup>
-  )
+  );
 }

@@ -99,7 +99,7 @@ export function ConsoleSecondaryNavItem(props: {
   );
 }
 
-export const  PageHeader = <P,>({
+export const PageHeader = <P,>({
   someReadOnly,
   hasBodyWrapper,
   variant,
@@ -354,14 +354,14 @@ export const  PageHeader = <P,>({
                     </StackItem>
                   )}
                   {acmActions && (
-                  <Flex
-                    flexWrap={{ default: 'nowrap' }}
-                    alignItems={{ default: 'alignItemsCenter' }}
-                    spaceItems={{ default: 'spaceItemsSm' }}
-                  >
-                    {acmActions}
-                  </Flex>
-                )}
+                    <Flex
+                      flexWrap={{ default: "nowrap" }}
+                      alignItems={{ default: "alignItemsCenter" }}
+                      spaceItems={{ default: "spaceItemsSm" }}
+                    >
+                      {acmActions}
+                    </Flex>
+                  )}
                 </Stack>
               </PageSection>
             </SplitItem>

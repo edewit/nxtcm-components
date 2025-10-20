@@ -1,73 +1,85 @@
 /* Copyright Contributors to the Open Cluster Management project */
-import { createContext, ReactNode, useCallback, useContext, useLayoutEffect, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 export enum EditorValidationStatus {
-  success = 'success',
-  pending = 'pending',
-  failure = 'failure',
+  success = "success",
+  pending = "pending",
+  failure = "failure",
 }
 
 export const EditorValidationStatusContext = createContext<{
-  editorValidationStatus: EditorValidationStatus
-  setEditorValidationStatus: (status: EditorValidationStatus) => void
+  editorValidationStatus: EditorValidationStatus;
+  setEditorValidationStatus: (status: EditorValidationStatus) => void;
 }>({
   editorValidationStatus: EditorValidationStatus.success,
   setEditorValidationStatus: () => void 0,
-})
-export const useEditorValidationStatus = () => useContext(EditorValidationStatusContext)
+});
+export const useEditorValidationStatus = () =>
+  useContext(EditorValidationStatusContext);
 
-const SetHasValidationErrorContext = createContext<() => void>(() => null)
-SetHasValidationErrorContext.displayName = 'SetHasValidationErrorContext'
-export const useSetHasValidationError = () => useContext(SetHasValidationErrorContext)
+const SetHasValidationErrorContext = createContext<() => void>(() => null);
+SetHasValidationErrorContext.displayName = "SetHasValidationErrorContext";
+export const useSetHasValidationError = () =>
+  useContext(SetHasValidationErrorContext);
 
-export const HasValidationErrorContext = createContext(true)
-HasValidationErrorContext.displayName = 'HasValidationErrorContext'
-export const useHasValidationError = () => useContext(HasValidationErrorContext)
+export const HasValidationErrorContext = createContext(true);
+HasValidationErrorContext.displayName = "HasValidationErrorContext";
+export const useHasValidationError = () =>
+  useContext(HasValidationErrorContext);
 
-const ValidateContext = createContext<() => void>(() => null)
-ValidateContext.displayName = 'ValidateContext'
-export const useValidate = () => useContext(ValidateContext)
+const ValidateContext = createContext<() => void>(() => null);
+ValidateContext.displayName = "ValidateContext";
+export const useValidate = () => useContext(ValidateContext);
 
 export function ValidationProvider(props: { children: ReactNode }) {
-  const [editorValidationStatus, setEditorValidationStatus] = useState<EditorValidationStatus>(
-    EditorValidationStatus.success
-  )
+  const [editorValidationStatus, setEditorValidationStatus] =
+    useState<EditorValidationStatus>(EditorValidationStatus.success);
 
-  const [hasValidationError, setHasValidationErrorState] = useState(false)
-  const [previousHasValidationError, setPreviousHasValidationError] = useState(false)
+  const [hasValidationError, setHasValidationErrorState] = useState(false);
+  const [previousHasValidationError, setPreviousHasValidationError] =
+    useState(false);
   const setHasValidationError = useCallback(() => {
     if (!hasValidationError) {
-      setHasValidationErrorState(true)
+      setHasValidationErrorState(true);
     }
-  }, [hasValidationError, setHasValidationErrorState])
+  }, [hasValidationError, setHasValidationErrorState]);
   const validate = useCallback(() => {
-    setHasValidationErrorState(false)
-  }, [setHasValidationErrorState])
+    setHasValidationErrorState(false);
+  }, [setHasValidationErrorState]);
 
-  const parentValidate = useContext(ValidateContext)
+  const parentValidate = useContext(ValidateContext);
   if (hasValidationError !== previousHasValidationError) {
-    setPreviousHasValidationError(hasValidationError)
+    setPreviousHasValidationError(hasValidationError);
     if (!hasValidationError) {
-      parentValidate()
+      parentValidate();
     }
   }
 
   // When this control goes away - parentValidate
   useLayoutEffect(
     () => () => {
-      parentValidate()
+      parentValidate();
     },
     [parentValidate]
-  )
+  );
 
-  const parentSetHasValidationError = useContext(SetHasValidationErrorContext)
+  const parentSetHasValidationError = useContext(SetHasValidationErrorContext);
   useLayoutEffect(() => {
-    if (hasValidationError) parentSetHasValidationError?.()
-  }, [parentSetHasValidationError, hasValidationError])
+    if (hasValidationError) parentSetHasValidationError?.();
+  }, [parentSetHasValidationError, hasValidationError]);
 
   return (
     <ValidateContext.Provider value={validate}>
-      <EditorValidationStatusContext.Provider value={{ editorValidationStatus, setEditorValidationStatus }}>
+      <EditorValidationStatusContext.Provider
+        value={{ editorValidationStatus, setEditorValidationStatus }}
+      >
         <SetHasValidationErrorContext.Provider value={setHasValidationError}>
           <HasValidationErrorContext.Provider value={hasValidationError}>
             {props.children}
@@ -75,5 +87,5 @@ export function ValidationProvider(props: { children: ReactNode }) {
         </SetHasValidationErrorContext.Provider>
       </EditorValidationStatusContext.Provider>
     </ValidateContext.Provider>
-  )
+  );
 }

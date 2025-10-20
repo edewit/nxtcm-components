@@ -1,8 +1,8 @@
 /* Copyright Contributors to the Open Cluster Management project */
 import {
   Button,
-Label,
-LabelGroup,
+  Label,
+  LabelGroup,
   MenuFooter,
   MenuToggle,
   MenuToggleElement,
@@ -11,25 +11,32 @@ LabelGroup,
   TextInputGroup,
   TextInputGroupMain,
   TextInputGroupUtilities,
-} from '@patternfly/react-core'
-import { TimesIcon } from '@patternfly/react-icons'
-import { FormEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import { useStringContext } from '../contexts/StringContext'
-import { OptionType } from './WizSelect'
+} from "@patternfly/react-core";
+import { TimesIcon } from "@patternfly/react-icons";
+import {
+  FormEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useStringContext } from "../contexts/StringContext";
+import { OptionType } from "./WizSelect";
 
 type InputSelectProps = {
-  disabled?: boolean
-  validated?: 'error'
-  options: string[]
-  setOptions: (options: string[]) => void
-  placeholder: string
-  value: string
-  onSelect: (value: string | undefined) => void
-  toggleRef: React.Ref<MenuToggleElement>
-  open: boolean
-  setOpen: (open: boolean) => void
-  required?: boolean
-}
+  disabled?: boolean;
+  validated?: "error";
+  options: string[];
+  setOptions: (options: string[]) => void;
+  placeholder: string;
+  value: string;
+  onSelect: (value: string | undefined) => void;
+  toggleRef: React.Ref<MenuToggleElement>;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  required?: boolean;
+};
 
 export const InputSelect = ({
   required,
@@ -44,40 +51,48 @@ export const InputSelect = ({
   open,
   setOpen,
 }: InputSelectProps) => {
-  const [inputValue, setInputValue] = useState('')
-  const textInputRef = useRef<HTMLInputElement>(null)
-  const onInputClick = useCallback(() => setOpen(!open), [open, setOpen])
+  const [inputValue, setInputValue] = useState("");
+  const textInputRef = useRef<HTMLInputElement>(null);
+  const onInputClick = useCallback(() => setOpen(!open), [open, setOpen]);
 
   useEffect(
     () =>
-      setOptions([...options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase())), inputValue]),
+      setOptions([
+        ...options.filter((option) =>
+          option.toLowerCase().includes(inputValue.toLowerCase())
+        ),
+        inputValue,
+      ]),
     [inputValue, options, setOptions]
-  )
+  );
 
   const onClear = useCallback(() => {
-    onSelect(undefined)
-    setInputValue('')
-    textInputRef?.current?.focus()
-  }, [onSelect])
+    onSelect(undefined);
+    setInputValue("");
+    textInputRef?.current?.focus();
+  }, [onSelect]);
 
   const onInputKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (!Array.isArray(value)) {
-        onSelect('')
+        onSelect("");
       }
-      setOpen(true)
+      setOpen(true);
       switch (event.key) {
-        case 'Backspace':
-          !Array.isArray(value) && onSelect('')
-          break
+        case "Backspace":
+          !Array.isArray(value) && onSelect("");
+          break;
       }
     },
     [onSelect, open, setOpen, value]
-  )
+  );
 
-  const onTextInputChange = useCallback((_event: FormEvent<HTMLInputElement>, value: string) => {
-    setInputValue(value)
-  }, [])
+  const onTextInputChange = useCallback(
+    (_event: FormEvent<HTMLInputElement>, value: string) => {
+      setInputValue(value);
+    },
+    []
+  );
 
   return (
     <MenuToggle
@@ -87,7 +102,7 @@ export const InputSelect = ({
       isExpanded={open}
       isDisabled={disabled}
       isFullWidth
-      status={validated === 'error' ? 'danger' : undefined}
+      status={validated === "error" ? "danger" : undefined}
     >
       <TextInputGroup isPlain>
         <TextInputGroupMain
@@ -104,7 +119,7 @@ export const InputSelect = ({
           aria-controls="select-typeahead-listbox"
         >
           {Array.isArray(value) && (
-            <LabelGroup style={{ marginTop: -8, marginBottom: -8 }} >
+            <LabelGroup style={{ marginTop: -8, marginBottom: -8 }}>
               {value.map((selection) => (
                 <Label readOnly key={selection}>
                   {selection}
@@ -114,24 +129,28 @@ export const InputSelect = ({
           )}
         </TextInputGroupMain>
 
-        <TextInputGroupUtilities {...((!inputValue && !value) || required ? { style: { display: 'none' } } : {})}>
+        <TextInputGroupUtilities
+          {...((!inputValue && !value) || required
+            ? { style: { display: "none" } }
+            : {})}
+        >
           <Button variant="plain" onClick={onClear}>
             <TimesIcon aria-hidden />
           </Button>
         </TextInputGroupUtilities>
       </TextInputGroup>
     </MenuToggle>
-  )
-}
+  );
+};
 
 type SelectListOptionsProps<T = any> = {
-  value: string
-  options: string[] | OptionType<T>[]
-  footer?: ReactNode
-  isCreatable?: boolean
-  onCreate?: (value: string) => void
-  isMultiSelect?: boolean
-}
+  value: string;
+  options: string[] | OptionType<T>[];
+  footer?: ReactNode;
+  isCreatable?: boolean;
+  onCreate?: (value: string) => void;
+  isMultiSelect?: boolean;
+};
 
 export const SelectListOptions = ({
   value,
@@ -141,34 +160,38 @@ export const SelectListOptions = ({
   footer,
   isMultiSelect,
 }: SelectListOptionsProps) => {
-  const { noResults, createOption } = useStringContext()
+  const { noResults, createOption } = useStringContext();
   return (
     <SelectList isAriaMultiselectable={isMultiSelect}>
       {options.map((option, index) => {
-        const isLastItem = index === options.length - 1
-        const isSingleItem = options.length === 1
-        const isSimpleOption = typeof option === 'string'
-        const valueString = String(isSimpleOption ? option : option.value)
-        const isCreateOption = isSingleItem && isCreatable && value !== valueString
-        const shouldSkipLastItem = isLastItem && (!isSingleItem || (isCreatable && value === valueString))
+        const isLastItem = index === options.length - 1;
+        const isSingleItem = options.length === 1;
+        const isSimpleOption = typeof option === "string";
+        const valueString = String(isSimpleOption ? option : option.value);
+        const isCreateOption =
+          isSingleItem && isCreatable && value !== valueString;
+        const shouldSkipLastItem =
+          isLastItem &&
+          (!isSingleItem || (isCreatable && value === valueString));
 
         if (shouldSkipLastItem) {
-          return null
+          return null;
         }
 
-        let displayText: string
+        let displayText: string;
         if (isCreateOption) {
-          displayText = `${createOption} "${valueString}"`
+          displayText = `${createOption} "${valueString}"`;
         } else if (isSingleItem) {
-          displayText = noResults
+          displayText = noResults;
         } else if (isSimpleOption) {
-          displayText = option
+          displayText = option;
         } else {
-          displayText = option.label
+          displayText = option.label;
         }
 
-        const isDisabled = displayText === noResults || (!isSimpleOption && option.disabled)
-        const optionValue = !isSimpleOption ? option.id : option
+        const isDisabled =
+          displayText === noResults || (!isSimpleOption && option.disabled);
+        const optionValue = !isSimpleOption ? option.id : option;
 
         return (
           <SelectOption
@@ -177,7 +200,11 @@ export const SelectListOptions = ({
             value={optionValue}
             description={!isSimpleOption ? option.description : undefined}
             isDisabled={isDisabled}
-            onClick={isCreateOption ? () => onCreate?.(!isSimpleOption ? option.value : option) : undefined}
+            onClick={
+              isCreateOption
+                ? () => onCreate?.(!isSimpleOption ? option.value : option)
+                : undefined
+            }
             isSelected={
               !isDisabled && !isCreateOption && Array.isArray(value)
                 ? value.includes(optionValue)
@@ -186,9 +213,9 @@ export const SelectListOptions = ({
           >
             {displayText}
           </SelectOption>
-        )
+        );
       })}
       {footer && <MenuFooter>{footer}</MenuFooter>}
     </SelectList>
-  )
-}
+  );
+};

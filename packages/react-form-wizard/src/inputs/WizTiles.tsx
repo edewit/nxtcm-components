@@ -4,15 +4,21 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
   Gallery,
-} from '@patternfly/react-core'
-import { Children, Fragment, isValidElement, ReactNode, useContext } from 'react'
-import { IRadioGroupContextState, RadioGroupContext } from '..'
-import { DisplayMode } from '../contexts/DisplayModeContext'
-import { InputCommonProps, useInput } from './Input'
-import { WizFormGroup } from './WizFormGroup'
-import { ServiceCard } from '@patternfly/react-component-groups'
+} from "@patternfly/react-core";
+import {
+  Children,
+  Fragment,
+  isValidElement,
+  ReactNode,
+  useContext,
+} from "react";
+import { IRadioGroupContextState, RadioGroupContext } from "..";
+import { DisplayMode } from "../contexts/DisplayModeContext";
+import { InputCommonProps, useInput } from "./Input";
+import { WizFormGroup } from "./WizFormGroup";
+import { ServiceCard } from "@patternfly/react-component-groups";
 
-type WizTilesProps = InputCommonProps & { children?: ReactNode }
+type WizTilesProps = InputCommonProps & { children?: ReactNode };
 
 // id: string
 // label?: string
@@ -26,34 +32,36 @@ type WizTilesProps = InputCommonProps & { children?: ReactNode }
 // helperText?: string
 // children?: ReactNode
 export function WizTiles(props: WizTilesProps) {
-  const { displayMode: mode, value, setValue, hidden, id } = useInput(props)
+  const { displayMode: mode, value, setValue, hidden, id } = useInput(props);
 
   const state: IRadioGroupContextState = {
     value: value,
     setValue: setValue,
     readonly: props.readonly,
     disabled: props.disabled,
-  }
+  };
 
-  if (hidden) return <Fragment />
+  if (hidden) return <Fragment />;
 
   if (mode === DisplayMode.Details) {
-    let label: string | undefined
+    let label: string | undefined;
     Children.forEach(props.children, (child) => {
-      if (!isValidElement(child)) return
-      if (child.type !== Tile) return
+      if (!isValidElement(child)) return;
+      if (child.type !== Tile) return;
       if (child.props.value === value) {
-        label = child.props.label
+        label = child.props.label;
       }
-    })
+    });
     if (label)
       return (
         <DescriptionListGroup>
           <DescriptionListTerm>{props.label}</DescriptionListTerm>
-          <DescriptionListDescription id={id}>{label}</DescriptionListDescription>
+          <DescriptionListDescription id={id}>
+            {label}
+          </DescriptionListDescription>
         </DescriptionListGroup>
-      )
-    return <Fragment />
+      );
+    return <Fragment />;
   }
 
   return (
@@ -62,26 +70,26 @@ export function WizTiles(props: WizTilesProps) {
         <Gallery hasGutter>{props.children}</Gallery>
       </WizFormGroup>
     </RadioGroupContext.Provider>
-  )
+  );
 }
 
 export function Tile(props: {
-  id: string
-  label: string
-  value: string | number | boolean
-  description?: string
-  icon?: ReactNode
-  children?: ReactNode
+  id: string;
+  label: string;
+  value: string | number | boolean;
+  description?: string;
+  icon?: ReactNode;
+  children?: ReactNode;
 }) {
-  const context = useContext(RadioGroupContext)
+  const context = useContext(RadioGroupContext);
   return (
-    <div onClick={() => context.setValue?.(props.value)} >
-      <ServiceCard 
+    <div onClick={() => context.setValue?.(props.value)}>
+      <ServiceCard
         isStacked
         title={props.label}
         description={props.description}
-        name={props.label} 
-        isDisabled={context.disabled} 
+        name={props.label}
+        isDisabled={context.disabled}
         readOnly={context.readonly}
         icon={props.icon}
       />
@@ -100,5 +108,5 @@ export function Tile(props: {
     // >
     //   {props.description}
     // </PFTile>
-  )
+  );
 }
