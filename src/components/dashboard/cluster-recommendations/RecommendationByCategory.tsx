@@ -32,20 +32,16 @@ export const RecommendationByCategory = ({
   faultTolerance,
   onCategoryClick,
 }: RecommendationByCategoryProps) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-
   const total = serviceAvailability + performance + security + faultTolerance;
   return (
-    <AccordionItem isExpanded={isExpanded}>
-      <AccordionToggle
-        onClick={() => {
-          setIsExpanded(!isExpanded);
-        }}
-        id="recommendationByCategoryToggle"
-      >
-        Recommendation by Category
-      </AccordionToggle>
-      <AccordionContent>
+    <Flex
+      direction={{ default: "column" }}
+      style={{ height: "100%", padding: "1rem" }}
+    >
+      <FlexItem>
+        <h3>Recommendation by Category</h3>
+      </FlexItem>
+      <FlexItem flex={{ default: 'flex_1' }}>
         <Flex className={styles.legend}>
           <FlexItem>
             <SquareFullIcon className={styles.serviceAvailability} />
@@ -58,7 +54,10 @@ export const RecommendationByCategory = ({
           </FlexItem>
           <FlexItem>
             <SquareFullIcon className={styles.performance} />
-            <Button onClick={() => onCategoryClick("performance")} variant="link">
+            <Button
+              onClick={() => onCategoryClick("performance")}
+              variant="link"
+            >
               Performance: {performance}
             </Button>
           </FlexItem>
@@ -70,7 +69,10 @@ export const RecommendationByCategory = ({
           </FlexItem>
           <FlexItem>
             <SquareFullIcon className={styles.faultTolerance} />
-            <Button onClick={() => onCategoryClick("faultTolerance")} variant="link">
+            <Button
+              onClick={() => onCategoryClick("faultTolerance")}
+              variant="link"
+            >
               Fault tolerance: {faultTolerance}
             </Button>
           </FlexItem>
@@ -101,7 +103,7 @@ export const RecommendationByCategory = ({
             &nbsp;
           </div>
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </FlexItem>
+    </Flex>
   );
 };
