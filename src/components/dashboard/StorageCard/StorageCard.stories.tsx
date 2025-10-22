@@ -8,8 +8,9 @@ const meta: Meta<typeof StorageCard> = {
     layout: "padded",
   },
   tags: ["autodocs"],
-  argTypes: {
-    onViewMore: { action: "view more clicked" },
+  args: {
+    // default to undefined - stories must explicitly provide onViewMore callback
+    onViewMore: undefined,
   },
 };
 
@@ -36,7 +37,7 @@ export const WithViewMore: Story = {
       osdClusters: 2.17,
       available: 21.89,
     },
-    onViewMore: () => console.log("View more clicked"),
+    onViewMore: () => alert("View more clicked!"),
   },
 };
 
