@@ -1,2 +1,1 @@
-export * from "./CVECard";
-
+export * from './CVECard';
