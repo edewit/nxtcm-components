@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
+import path from 'path';
 
 const config: StorybookConfig = {
   "stories": [
@@ -12,6 +13,15 @@ const config: StorybookConfig = {
   "framework": {
     "name": "@storybook/react-webpack5",
     "options": {}
-  }
+  },
+  webpackFinal: async (config) => {
+    if (config.resolve) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@patternfly-labs/react-form-wizard': path.resolve(__dirname, '../packages/react-form-wizard/src'),
+      };
+    }
+    return config;
+  },
 };
 export default config;

@@ -1,4 +1,5 @@
-import '@patternfly/react-core/dist/styles/base.css'; // 👈 Add this line
+import '@patternfly/react-core/dist/styles/base.css'; 
+import '@patternfly/patternfly/patternfly-addons.css';
 
 import type { Preview } from "@storybook/react";
 
