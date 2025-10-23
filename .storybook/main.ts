@@ -24,14 +24,18 @@ const config: StorybookConfig = {
         },
       },
     });
-    // Add SCSS support (only for .scss files, let Storybook handle .css)
+
+    // Add SCSS module support
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
+
+    // Add regular SCSS rule
     config.module.rules.push({
       test: /\.scss$/,
+      exclude: /\.module\.scss$/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
     });
-    
+
     const cssRuleIndex = config.module?.rules?.findIndex((rule) => {
       if (typeof rule !== "object" || rule === null || !("test" in rule)) {
         return false;

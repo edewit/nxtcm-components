@@ -8,3 +8,4 @@ export * from './PageHeader';
 export * from './Wizards';
 export * from './YamlCodeEditor';
 export * from './dashboard/StorageCard';
+export * from './NotificationsPanel';
