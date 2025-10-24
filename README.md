@@ -78,6 +78,17 @@ Run tests in watch mode:
 ```bash
 npm test:watch
 ```
+### Playwright Tests
+
+Run playwright tests:
+```bash
+npx playwright test
+```
+
+Run playwright component tests:
+```bash
+npm run test-ct
+```
 
 ### Type Checking
 

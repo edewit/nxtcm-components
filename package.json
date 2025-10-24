@@ -11,7 +11,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
     "@patternfly/patternfly": "^6.4.0",
@@ -28,6 +29,8 @@
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
+    "@playwright/experimental-ct-react": "^1.56.1",
+    "@playwright/test": "^1.56.1",
     "@storybook/addon-docs": "^9.1.10",
     "@storybook/addon-styling": "^1.3.7",
     "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
@@ -36,6 +39,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^29.5.12",
+    "@types/node": "^24.9.1",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "babel-jest": "^29.7.0",
