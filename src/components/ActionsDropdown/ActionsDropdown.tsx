@@ -22,6 +22,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "../../context/TranslationContext";
 
 export type DropdownItem<T extends string | number> = {
   id: T;
@@ -134,9 +135,10 @@ export function ActionsDropdown<T extends string | number>(
     tooltipPosition,
     onToggle,
     onHover,
-    kebabAriaLabel = "Actions",
+    kebabAriaLabel,
     ...rest
   } = props;
+  const { t } = useTranslation();
   const [isOpen, setOpen] = useState<boolean>(false);
   const popperContainer = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -219,7 +221,7 @@ export function ActionsDropdown<T extends string | number>(
           onClick={toggleMenu}
           onMouseOver={onHover}
           isExpanded={isOpen}
-          aria-label={isKebab ? kebabAriaLabel : String(text)}
+          aria-label={isKebab ? (kebabAriaLabel || t("Actions")) : String(text)}
         >
           {isKebab ? <EllipsisVIcon /> : text}
         </MenuToggle>

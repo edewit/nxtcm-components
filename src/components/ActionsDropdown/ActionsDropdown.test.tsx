@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ActionsDropdown, DropdownItem } from "./ActionsDropdown";
+import { TranslationProvider } from '../../context/TranslationContext';
 
 const mockItems: DropdownItem<string>[] = [
   { id: "item1", text: "Item One" },
@@ -247,6 +248,52 @@ describe("ActionsDropdown", () => {
 
       expect(onSelectMock).not.toHaveBeenCalled();
       expect(screen.getByText("Flyout Menu")).toBeVisible();
+    });
+  });
+
+  describe('translation support', () => {
+    it('should use default English text when no translation provider is used', () => {
+      render(
+        <ActionsDropdown id="test-default" dropdownItems={mockItems} isKebab />,
+      );
+      expect(screen.getByRole('button', { name: /Actions/i })).toBeInTheDocument();
+    });
+
+    it('should use custom translation function when provided', () => {
+      const mockTranslate = jest.fn((key: string) => {
+        if (key === 'Actions') return 'Acciones';
+        return key;
+      });
+
+      render(
+        <TranslationProvider translate={mockTranslate}>
+          <ActionsDropdown id="test-translated" dropdownItems={mockItems} isKebab />
+        </TranslationProvider>,
+      );
+
+      expect(screen.getByRole('button', { name: /Acciones/i })).toBeInTheDocument();
+      expect(mockTranslate).toHaveBeenCalledWith('Actions');
+    });
+
+    it('should allow kebabAriaLabel to override translation', () => {
+      const mockTranslate = jest.fn((key: string) => {
+        if (key === 'Actions') return 'Acciones';
+        return key;
+      });
+
+      render(
+        <TranslationProvider translate={mockTranslate}>
+          <ActionsDropdown
+            id="test-override"
+            dropdownItems={mockItems}
+            isKebab
+            kebabAriaLabel="Custom Label"
+          />
+        </TranslationProvider>,
+      );
+
+      expect(screen.getByRole('button', { name: /Custom Label/i })).toBeInTheDocument();
+      expect(mockTranslate).not.toHaveBeenCalledWith('Actions');
     });
   });
 });
