@@ -13,7 +13,7 @@ This repository provides reusable React components built with PatternFly that se
 - **TypeScript Support**: Fully typed components with TypeScript
 - **Storybook**: Interactive component documentation and development environment
 - **Testing**: Comprehensive unit tests with Jest and React Testing Library
-- **Modern Tooling**: Webpack, Babel, and modern JavaScript features
+- **Modern Tooling**: Vite, modern JavaScript features, and fast HMR
 
 ## Prerequisites
 
@@ -108,10 +108,16 @@ npm run prettier:fix
 
 ### Development Server
 
-Start the webpack development server:
+Start the Vite development server:
 
 ```bash
 npm start
+```
+
+Preview the production build:
+
+```bash
+npm run preview
 ```
 
 ## Project Structure
@@ -126,11 +132,11 @@ nxtcm-components/
 ├── src/                  # Source code
 │   ├── index.ts          # Main entry point
 │   └── index.scss        # Global styles
-├── babel.config.js       # Babel configuration
+├── babel.config.js       # Babel configuration (for Jest)
 ├── jest.config.js        # Jest test configuration
 ├── jest.setup.js         # Jest setup file
 ├── tsconfig.json         # TypeScript configuration
-└── webpack.config.js     # Webpack configuration
+└── vite.config.ts        # Vite configuration
 ```
 
 ## Usage
@@ -199,16 +205,16 @@ Components in this library follow these principles:
 - **Storybook**: Component documentation and development
 - **Jest**: Unit testing framework
 - **React Testing Library**: Testing utilities
-- **Webpack**: Module bundler
-- **Babel**: JavaScript compiler
+- **Vite**: Lightning-fast build tool and dev server
 - **SASS**: CSS preprocessing
 
 ## Scripts Reference
 
 | Command | Description |
 |---------|-------------|
-| `npm start` | Start webpack dev server |
+| `npm start` | Start Vite dev server |
 | `npm run build` | Build library for production |
+| `npm run preview` | Preview production build locally |
 | `npm run type-check` | Run TypeScript type checking |
 | `npm run prettier:fix` | Format code with Prettier |
 | `npm test` | Run all tests |
