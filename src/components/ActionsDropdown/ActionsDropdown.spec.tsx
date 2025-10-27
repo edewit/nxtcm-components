@@ -17,22 +17,14 @@ const mockItems: DropdownItem<string>[] = [
 ];
 
 test.describe('ActionsDropdown', () => {
-  test('should render the toggle button with the provided text', async ({
-    mount,
-  }) => {
+  test('should render the toggle button with the provided text', async ({ mount }) => {
     const component = await mount(
-      <ActionsDropdown
-        id="test-dropdown"
-        dropdownItems={mockItems}
-        text="My Actions"
-      />
+      <ActionsDropdown id="test-dropdown" dropdownItems={mockItems} text="My Actions" />
     );
     await expect(component.getByRole('button', { name: /My Actions/i })).toBeVisible();
   });
 
-  test('should render as a kebab toggle when isKebab is true', async ({
-    mount,
-  }) => {
+  test('should render as a kebab toggle when isKebab is true', async ({ mount }) => {
     const component = await mount(
       <ActionsDropdown id="test-kebab" dropdownItems={mockItems} isKebab />
     );
@@ -48,34 +40,19 @@ test.describe('ActionsDropdown', () => {
         kebabAriaLabel="More Options"
       />
     );
-    await expect(
-      component.getByRole('button', { name: /More Options/i })
-    ).toBeVisible();
+    await expect(component.getByRole('button', { name: /More Options/i })).toBeVisible();
   });
 
-  test('should render a disabled toggle when isDisabled is true', async ({
-    mount,
-  }) => {
+  test('should render a disabled toggle when isDisabled is true', async ({ mount }) => {
     const component = await mount(
-      <ActionsDropdown
-        id="test-disabled"
-        dropdownItems={mockItems}
-        text="Disabled"
-        isDisabled
-      />
+      <ActionsDropdown id="test-disabled" dropdownItems={mockItems} text="Disabled" isDisabled />
     );
-    await expect(
-      component.getByRole('button', { name: /Disabled/i })
-    ).toBeDisabled();
+    await expect(component.getByRole('button', { name: /Disabled/i })).toBeDisabled();
   });
 
   test('should open and close the menu on toggle click', async ({ mount }) => {
     const component = await mount(
-      <ActionsDropdown
-        id="test-toggle"
-        dropdownItems={mockItems}
-        text="Toggle Me"
-      />
+      <ActionsDropdown id="test-toggle" dropdownItems={mockItems} text="Toggle Me" />
     );
 
     await expect(component.getByText('Item One')).not.toBeVisible();
@@ -88,9 +65,7 @@ test.describe('ActionsDropdown', () => {
     await expect(component.getByText('Item One')).not.toBeVisible();
   });
 
-  test('should call onSelect with the correct item id and close the menu', async ({
-    mount,
-  }) => {
+  test('should call onSelect with the correct item id and close the menu', async ({ mount }) => {
     let selectedId: string | undefined;
     const onSelectMock = (id: string) => {
       selectedId = id;
@@ -114,9 +89,7 @@ test.describe('ActionsDropdown', () => {
     await expect(component.getByText('Item One')).not.toBeVisible();
   });
 
-  test("should call the item's specific onSelect handler", async ({
-    mount,
-  }) => {
+  test("should call the item's specific onSelect handler", async ({ mount }) => {
     let itemSelectCalled = false;
     const itemsWithOnSelect: DropdownItem<string>[] = [
       ...mockItems,
@@ -137,9 +110,7 @@ test.describe('ActionsDropdown', () => {
       />
     );
 
-    await component
-      .getByRole('button', { name: /Item Select Test/i })
-      .click();
+    await component.getByRole('button', { name: /Item Select Test/i }).click();
     await component.getByText('Item with onSelect').click();
 
     expect(itemSelectCalled).toBe(true);
@@ -149,11 +120,7 @@ test.describe('ActionsDropdown', () => {
     mount,
   }) => {
     const component = await mount(
-      <ActionsDropdown
-        id="test-escape"
-        dropdownItems={mockItems}
-        text="Escape Test"
-      />
+      <ActionsDropdown id="test-escape" dropdownItems={mockItems} text="Escape Test" />
     );
     const toggleButton = component.getByRole('button', { name: /Escape Test/i });
 
@@ -168,11 +135,7 @@ test.describe('ActionsDropdown', () => {
   test('should close the menu on an outside click', async ({ mount, page }) => {
     const component = await mount(
       <div style={{ padding: '50px' }}>
-        <ActionsDropdown
-          id="test-outside"
-          dropdownItems={mockItems}
-          text="Outside Click"
-        />
+        <ActionsDropdown id="test-outside" dropdownItems={mockItems} text="Outside Click" />
         <div style={{ marginTop: '200px', height: '50px' }}>
           <button id="outside-btn">Outside Button</button>
         </div>
@@ -202,10 +165,8 @@ test.describe('ActionsDropdown', () => {
       />
     );
 
-    await component
-      .getByRole('button', { name: /Disabled Item Test/i })
-      .click();
-    
+    await component.getByRole('button', { name: /Disabled Item Test/i }).click();
+
     // Find the disabled menu item by role
     const disabledItem = component.getByRole('menuitem', { name: /Item Two/i });
 
@@ -218,9 +179,7 @@ test.describe('ActionsDropdown', () => {
   });
 
   test.describe('when dealing with flyout menus', () => {
-    test('should show the flyout menu on hover/click and handle selection', async ({
-      mount,
-    }) => {
+    test('should show the flyout menu on hover/click and handle selection', async ({ mount }) => {
       let selectedId: string | undefined;
       const onSelectMock = (id: string) => {
         selectedId = id;
@@ -250,9 +209,7 @@ test.describe('ActionsDropdown', () => {
       await expect(component.getByText('Flyout Menu')).not.toBeVisible();
     });
 
-    test('should not call onSelect when a flyout parent is clicked', async ({
-      mount,
-    }) => {
+    test('should not call onSelect when a flyout parent is clicked', async ({ mount }) => {
       let selectCallCount = 0;
       const onSelectMock = () => {
         selectCallCount++;
@@ -267,9 +224,7 @@ test.describe('ActionsDropdown', () => {
         />
       );
 
-      await component
-        .getByRole('button', { name: /Flyout Parent Test/i })
-        .click();
+      await component.getByRole('button', { name: /Flyout Parent Test/i }).click();
 
       const flyoutParent = component.getByText('Flyout Menu');
       await flyoutParent.click();
@@ -286,14 +241,10 @@ test.describe('ActionsDropdown', () => {
       const component = await mount(
         <ActionsDropdown id="test-default" dropdownItems={mockItems} isKebab />
       );
-      await expect(
-        component.getByRole('button', { name: /Actions/i })
-      ).toBeVisible();
+      await expect(component.getByRole('button', { name: /Actions/i })).toBeVisible();
     });
 
-    test('should use custom translation function when provided', async ({
-      mount,
-    }) => {
+    test('should use custom translation function when provided', async ({ mount }) => {
       let translationCalled = false;
       let translatedValue = '';
       const mockTranslate = (key: string) => {
@@ -307,26 +258,20 @@ test.describe('ActionsDropdown', () => {
 
       const component = await mount(
         <TranslationProvider translate={mockTranslate}>
-          <ActionsDropdown
-            id="test-translated"
-            dropdownItems={mockItems}
-            isKebab
-          />
+          <ActionsDropdown id="test-translated" dropdownItems={mockItems} isKebab />
         </TranslationProvider>
       );
 
       // Check that the button is visible
       const button = component.getByRole('button');
       await expect(button).toBeVisible();
-      
+
       // Verify translation function was called
       expect(translationCalled).toBe(true);
       expect(translatedValue).toBe('Acciones');
     });
 
-    test('should allow kebabAriaLabel to override translation', async ({
-      mount,
-    }) => {
+    test('should allow kebabAriaLabel to override translation', async ({ mount }) => {
       let translationCalled = false;
       const mockTranslate = (key: string) => {
         if (key === 'Actions') {
@@ -355,4 +300,3 @@ test.describe('ActionsDropdown', () => {
     });
   });
 });
-
