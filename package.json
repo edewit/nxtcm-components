@@ -11,9 +11,11 @@
     "prettier:fix": "prettier --write '{src,cypress,scripts}/**/*.{js,ts,mjs,jsx,tsx}'",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:ct": "playwright test -c playwright-ct.config.ts",
+    "test:ct:watch": "playwright test -c playwright-ct.config.ts --ui",
+    "test:ct:debug": "playwright test -c playwright-ct.config.ts --debug",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test-ct": "playwright test -c playwright-ct.config.ts"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@patternfly/patternfly": "^6.4.0",
