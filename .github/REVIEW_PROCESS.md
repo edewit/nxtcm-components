@@ -33,7 +33,7 @@ Consider adding reviewers who have:
 
 **Example comment:**
 ```
-@qe-team-member - Could you please pull this locally and manually test the new wizard step? 
+@jloss-redhat - Could you please pull this locally and manually test the new wizard step? 
 Specifically, I'd like you to verify:
 1. The form validation works correctly
 2. The submit button enables/disables as expected
