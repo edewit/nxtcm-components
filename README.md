@@ -142,7 +142,7 @@ npm run preview
 ```
 nxtcm-components/
 ├── .github/              # GitHub configuration files
-│   ├── CODEOWNERS        # Code ownership definitions
+│   ├── REVIEW_PROCESS.md # PR review guidelines
 │   └── pull_request_template.md
 ├── .storybook/           # Storybook configuration
 ├── public/               # Public assets
@@ -321,7 +321,7 @@ For questions, issues, or contributions:
 
 - **Issues**: [GitHub Issues](https://github.com/RedHatInsights/nxtcm-components/issues)
 - **Pull Requests**: [GitHub PRs](https://github.com/RedHatInsights/nxtcm-components/pulls)
-- **Maintainers**: See [CODEOWNERS](.github/CODEOWNERS)
+- **Review Process**: See [REVIEW_PROCESS.md](.github/REVIEW_PROCESS.md)
 
 ## Related Projects
 
