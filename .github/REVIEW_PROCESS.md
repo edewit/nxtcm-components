@@ -22,6 +22,24 @@ Consider adding reviewers who have:
 
 **There are no restrictions - add whoever makes sense for your PR!**
 
+### Requesting QE/Manual Testing
+
+**If you want QE to manually test your changes:**
+- ✅ **Tag QE team members specifically** in the reviewers list
+- ✅ **Comment in the PR** that you're requesting manual testing
+- ✅ **Be explicit about what to test** - provide test scenarios or steps
+- ✅ **Indicate if they need to pull locally** and test in their environment
+- ✅ **Provide setup instructions** if there are any special requirements
+
+**Example comment:**
+```
+@qe-team-member - Could you please pull this locally and manually test the new wizard step? 
+Specifically, I'd like you to verify:
+1. The form validation works correctly
+2. The submit button enables/disables as expected
+3. Error messages display properly
+```
+
 ## ✅ Best Practices
 
 ### For PR Authors
@@ -107,6 +125,7 @@ We trust each team member to:
 
 - **Not sure who to add as reviewer?** → Ask in team chat in Slack #team-console-next or add 2-3 people
 - **Need urgent review?** → Tag in PR + ping in Slack
+- **Need manual/QE testing?** → Tag QE team members specifically and comment with test instructions
 - **Big architectural decision?** → Add maintainers with architecture expertise
 - **Need more eyes?** → Add more reviewers (there's no limit!)
 
