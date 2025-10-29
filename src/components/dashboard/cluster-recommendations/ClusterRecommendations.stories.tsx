@@ -85,4 +85,3 @@ export const HighCount: Story = {
     faultTolerance: 150,
   },
 };
-

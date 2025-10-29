@@ -1,7 +1,7 @@
-import { Button, Flex, FlexItem } from "@patternfly/react-core";
-import { CriticalRiskIcon } from "@patternfly/react-icons";
+import { Button, Flex, FlexItem } from '@patternfly/react-core';
+import { CriticalRiskIcon } from '@patternfly/react-icons';
 
-import styles from "./Critical.module.scss";
+import styles from './Critical.module.scss';
 
 export type CriticalProps = {
   count: number;
@@ -9,22 +9,13 @@ export type CriticalProps = {
 };
 
 export const Critical = ({ count, onViewRecommendations }: CriticalProps) => (
-  <Flex
-    direction={{ default: "column" }}
-    style={{ height: "100%", padding: "1rem" }}
-  >
+  <Flex direction={{ default: 'column' }} style={{ height: '100%', padding: '1rem' }}>
     <FlexItem>
       <h3>Critical recommendations</h3>
     </FlexItem>
     <FlexItem>
-      <p>
-        Conditions that cause issues have been detected actively detected on
-        your systems.
-      </p>
-      <Flex
-        direction={{ default: "column" }}
-        alignItems={{ default: "alignItemsCenter" }}
-      >
+      <p>Conditions that cause issues have been detected actively detected on your systems.</p>
+      <Flex direction={{ default: 'column' }} alignItems={{ default: 'alignItemsCenter' }}>
         <FlexItem className={styles.danger}>
           <CriticalRiskIcon /> {count}
         </FlexItem>

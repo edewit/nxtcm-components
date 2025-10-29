@@ -1,8 +1,8 @@
-import { Critical, CriticalProps } from "./Critical";
+import { Critical, CriticalProps } from './Critical';
 import {
   RecommendationByCategory,
   RecommendationByCategoryProps,
-} from "./RecommendationByCategory";
+} from './RecommendationByCategory';
 
 type ClusterRecommendationProps = CriticalProps & RecommendationByCategoryProps;
 
