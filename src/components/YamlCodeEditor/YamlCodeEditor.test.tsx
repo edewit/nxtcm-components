@@ -13,8 +13,8 @@ describe('YamlCodeEditor', () => {
   it('renders with provided code', () => {
     const code = 'name: test\nvalue: 123';
     render(<YamlCodeEditor code={code} />);
-    const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
-    expect(textarea.value).toBe(code);
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).toHaveValue(code);
   });
 
   it('calls onChange when text is changed', () => {
@@ -27,8 +27,8 @@ describe('YamlCodeEditor', () => {
 
   it('is read-only when isReadOnly is true', () => {
     render(<YamlCodeEditor code="test" isReadOnly={true} />);
-    const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
-    expect(textarea.readOnly).toBe(true);
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).toHaveAttribute('readonly');
   });
 
   it('applies custom className', () => {
@@ -58,8 +58,8 @@ describe('YamlCodeEditor', () => {
     const code = 'line1\nline2\nline3';
     render(<YamlCodeEditor code={code} />);
     // Component should render without errors
-    const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
-    expect(textarea.value).toBe(code);
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).toHaveValue(code);
   });
 
   it('handles Tab key for indentation', () => {

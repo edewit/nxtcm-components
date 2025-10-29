@@ -24,96 +24,103 @@ data:
   key1: value1
   key2: value2`;
 
+const DefaultComponent = () => {
+  const [code, setCode] = useState(sampleYaml);
+  return <YamlCodeEditor code={code} onChange={setCode} />;
+};
+
+const EmptyComponent = () => {
+  const [code, setCode] = useState('');
+  return <YamlCodeEditor code={code} onChange={setCode} />;
+};
+
+const CustomHeightComponent = () => {
+  const [code, setCode] = useState(sampleYaml);
+  return <YamlCodeEditor code={code} onChange={setCode} height="600px" />;
+};
+
+const NoLineNumbersComponent = () => {
+  const [code, setCode] = useState(sampleYaml);
+  return <YamlCodeEditor code={code} onChange={setCode} isLineNumbersVisible={false} />;
+};
+
 export const Default: Story = {
-  render: () => {
-    const [code, setCode] = useState(sampleYaml);
-    return <YamlCodeEditor code={code} onChange={setCode} />;
-  },
+  render: () => <DefaultComponent />,
 };
 
 export const Empty: Story = {
-  render: () => {
-    const [code, setCode] = useState('');
-    return <YamlCodeEditor code={code} onChange={setCode} />;
-  },
+  render: () => <EmptyComponent />,
 };
 
 export const ReadOnly: Story = {
-  render: () => {
-    return <YamlCodeEditor code={sampleYaml} isReadOnly={true} />;
-  },
+  render: () => <YamlCodeEditor code={sampleYaml} isReadOnly={true} />,
 };
 
 export const CustomHeight: Story = {
-  render: () => {
-    const [code, setCode] = useState(sampleYaml);
-    return <YamlCodeEditor code={code} onChange={setCode} height="600px" />;
-  },
+  render: () => <CustomHeightComponent />,
 };
 
 export const NoLineNumbers: Story = {
-  render: () => {
-    const [code, setCode] = useState(sampleYaml);
-    return <YamlCodeEditor code={code} onChange={setCode} isLineNumbersVisible={false} />;
-  },
+  render: () => <NoLineNumbersComponent />,
+};
+
+const WithValidationComponent = () => {
+  const [code, setCode] = useState(sampleYaml);
+  const [validationMessage, setValidationMessage] = useState('');
+
+  const handleValidate = () => {
+    const result = parseYaml(code);
+    if (result.isValid) {
+      setValidationMessage('✓ YAML is valid!');
+    } else {
+      const errorMsg = result.errorLine
+        ? `✗ Error on line ${result.errorLine}: ${result.error}`
+        : `✗ Error: ${result.error}`;
+      setValidationMessage(errorMsg);
+    }
+  };
+
+  return (
+    <div>
+      <YamlCodeEditor code={code} onChange={setCode} />
+      <div style={{ marginTop: '16px' }}>
+        <button
+          onClick={handleValidate}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#0066cc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+          }}
+        >
+          Validate YAML
+        </button>
+        {validationMessage && (
+          <div
+            style={{
+              marginTop: '8px',
+              padding: '8px',
+              borderRadius: '3px',
+              backgroundColor: validationMessage.startsWith('✓') ? '#e7f4e4' : '#fce3e3',
+              color: validationMessage.startsWith('✓') ? '#2d5016' : '#7d1007',
+            }}
+          >
+            {validationMessage}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export const WithValidation: Story = {
-  render: () => {
-    const [code, setCode] = useState(sampleYaml);
-    const [validationMessage, setValidationMessage] = useState('');
-
-    const handleValidate = () => {
-      const result = parseYaml(code);
-      if (result.isValid) {
-        setValidationMessage('✓ YAML is valid!');
-      } else {
-        const errorMsg = result.errorLine
-          ? `✗ Error on line ${result.errorLine}: ${result.error}`
-          : `✗ Error: ${result.error}`;
-        setValidationMessage(errorMsg);
-      }
-    };
-
-    return (
-      <div>
-        <YamlCodeEditor code={code} onChange={setCode} />
-        <div style={{ marginTop: '16px' }}>
-          <button
-            onClick={handleValidate}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#0066cc',
-              color: 'white',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: 'pointer',
-            }}
-          >
-            Validate YAML
-          </button>
-          {validationMessage && (
-            <div
-              style={{
-                marginTop: '8px',
-                padding: '8px',
-                borderRadius: '3px',
-                backgroundColor: validationMessage.startsWith('✓') ? '#e7f4e4' : '#fce3e3',
-                color: validationMessage.startsWith('✓') ? '#2d5016' : '#7d1007',
-              }}
-            >
-              {validationMessage}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  },
+  render: () => <WithValidationComponent />,
 };
 
-export const WithPrettify: Story = {
-  render: () => {
-    const messyYaml = `apiVersion:    v1
+const WithPrettifyComponent = () => {
+  const messyYaml = `apiVersion:    v1
 kind:   ConfigMap
 metadata:
       name:   my-config
@@ -122,46 +129,50 @@ data:
     key1:   value1
     key2:   value2`;
 
-    const [code, setCode] = useState(messyYaml);
+  const [code, setCode] = useState(messyYaml);
 
-    const handlePrettify = () => {
-      const prettified = prettifyYaml(code, 2);
-      setCode(prettified);
-    };
+  const handlePrettify = () => {
+    const prettified = prettifyYaml(code, 2);
+    setCode(prettified);
+  };
 
-    return (
-      <div>
-        <YamlCodeEditor code={code} onChange={setCode} />
-        <div style={{ marginTop: '16px' }}>
-          <button
-            onClick={handlePrettify}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#0066cc',
-              color: 'white',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: 'pointer',
-            }}
-          >
-            Prettify YAML
-          </button>
-        </div>
+  return (
+    <div>
+      <YamlCodeEditor code={code} onChange={setCode} />
+      <div style={{ marginTop: '16px' }}>
+        <button
+          onClick={handlePrettify}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#0066cc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+          }}
+        >
+          Prettify YAML
+        </button>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const WithPrettify: Story = {
+  render: () => <WithPrettifyComponent />,
+};
+
+const SmallEditorComponent = () => {
+  const [code, setCode] = useState('name: test\nvalue: 123');
+  return <YamlCodeEditor code={code} onChange={setCode} height="150px" />;
 };
 
 export const SmallEditor: Story = {
-  render: () => {
-    const [code, setCode] = useState('name: test\nvalue: 123');
-    return <YamlCodeEditor code={code} onChange={setCode} height="150px" />;
-  },
+  render: () => <SmallEditorComponent />,
 };
 
-export const LargeDocument: Story = {
-  render: () => {
-    const largeYaml = `apiVersion: apps/v1
+const LargeDocumentComponent = () => {
+  const largeYaml = `apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
@@ -202,14 +213,16 @@ spec:
         configMap:
           name: nginx-config`;
 
-    const [code, setCode] = useState(largeYaml);
-    return <YamlCodeEditor code={code} onChange={setCode} height="500px" />;
-  },
+  const [code, setCode] = useState(largeYaml);
+  return <YamlCodeEditor code={code} onChange={setCode} height="500px" />;
 };
 
-export const WithSyntaxHighlighting: Story = {
-  render: () => {
-    const yamlWithAllFeatures = `---
+export const LargeDocument: Story = {
+  render: () => <LargeDocumentComponent />,
+};
+
+const WithSyntaxHighlightingComponent = () => {
+  const yamlWithAllFeatures = `---
 # Configuration file example
 apiVersion: v1
 kind: ConfigMap
@@ -261,14 +274,19 @@ data:
     name: "Service A"
 ...`;
 
-    const [code, setCode] = useState(yamlWithAllFeatures);
-    return <YamlCodeEditor code={code} onChange={setCode} height="600px" />;
-  },
+  const [code, setCode] = useState(yamlWithAllFeatures);
+  return <YamlCodeEditor code={code} onChange={setCode} height="600px" />;
+};
+
+const WithoutSyntaxHighlightingComponent = () => {
+  const [code, setCode] = useState(sampleYaml);
+  return <YamlCodeEditor code={code} onChange={setCode} enableSyntaxHighlighting={false} />;
+};
+
+export const WithSyntaxHighlighting: Story = {
+  render: () => <WithSyntaxHighlightingComponent />,
 };
 
 export const WithoutSyntaxHighlighting: Story = {
-  render: () => {
-    const [code, setCode] = useState(sampleYaml);
-    return <YamlCodeEditor code={code} onChange={setCode} enableSyntaxHighlighting={false} />;
-  },
+  render: () => <WithoutSyntaxHighlightingComponent />,
 };

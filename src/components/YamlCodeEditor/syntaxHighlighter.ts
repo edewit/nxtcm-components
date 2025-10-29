@@ -17,7 +17,7 @@ export function highlightYaml(code: string): string {
 
   const lines = code.split('\n');
   const highlightedLines = lines.map((line) => {
-    let highlighted = escapeHtml(line);
+    const highlighted = escapeHtml(line);
 
     // Skip empty lines
     if (!highlighted.trim()) {
