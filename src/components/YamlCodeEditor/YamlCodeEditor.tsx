@@ -71,7 +71,6 @@ export function prettifyYaml(yamlString: string, indent: number = 2): string {
     });
   } catch (error) {
     // If parsing fails, return the original string
-    console.error('Failed to prettify YAML:', error);
     return yamlString;
   }
 }
@@ -91,7 +90,6 @@ export function objectToYaml(obj: any, indent: number = 2): string {
       sortKeys: false,
     });
   } catch (error) {
-    console.error('Failed to convert object to YAML:', error);
     return '';
   }
 }

@@ -74,9 +74,8 @@ spec:
   },
 };
 
-export const WithAutoValidation: Story = {
-  render: () => {
-    const [code, setCode] = useState(`apiVersion: v1
+const WithAutoValidationComponent = () => {
+  const [code, setCode] = useState(`apiVersion: v1
 kind: Pod
 metadata:
   name: test-pod
@@ -84,117 +83,122 @@ spec:
   containers:
   - name: nginx
     image: nginx:latest`);
-    const [validation, setValidation] = useState<{ isValid: boolean; error?: string } | null>(null);
+  const [validation, setValidation] = useState<{ isValid: boolean; error?: string } | null>(null);
 
-    const handlePrettify = () => {
-      const prettified = prettifyYaml(code);
-      setCode(prettified);
-    };
+  const handlePrettify = () => {
+    const prettified = prettifyYaml(code);
+    setCode(prettified);
+  };
 
-    return (
-      <Stack hasGutter>
-        <StackItem>
-          <YamlCodeEditor
-            code={code}
-            onChange={setCode}
-            onValidate={(result) => {
-              setValidation({
-                isValid: result.isValid,
-                error: result.error,
-              });
-            }}
-            debounceDelay={500}
-            height="400px"
-          />
-        </StackItem>
-        <StackItem>
-          <Stack hasGutter>
+  return (
+    <Stack hasGutter>
+      <StackItem>
+        <YamlCodeEditor
+          code={code}
+          onChange={setCode}
+          onValidate={(result) => {
+            setValidation({
+              isValid: result.isValid,
+              error: result.error,
+            });
+          }}
+          debounceDelay={500}
+          height="400px"
+        />
+      </StackItem>
+      <StackItem>
+        <Stack hasGutter>
+          <StackItem>
+            <Button onClick={handlePrettify} variant="secondary">
+              Prettify YAML
+            </Button>
+          </StackItem>
+          {validation && (
             <StackItem>
-              <Button onClick={handlePrettify} variant="secondary">
-                Prettify YAML
-              </Button>
+              <Alert
+                variant={validation.isValid ? 'success' : 'danger'}
+                title={validation.isValid ? 'Valid YAML' : 'Invalid YAML'}
+                isInline
+              >
+                {validation.error || 'YAML is valid and can be parsed successfully.'}
+              </Alert>
             </StackItem>
-            {validation && (
-              <StackItem>
-                <Alert
-                  variant={validation.isValid ? 'success' : 'danger'}
-                  title={validation.isValid ? 'Valid YAML' : 'Invalid YAML'}
-                  isInline
-                >
-                  {validation.error || 'YAML is valid and can be parsed successfully.'}
-                </Alert>
-              </StackItem>
-            )}
-          </Stack>
-        </StackItem>
-      </Stack>
-    );
-  },
+          )}
+        </Stack>
+      </StackItem>
+    </Stack>
+  );
+};
+
+export const WithAutoValidation: Story = {
+  render: () => <WithAutoValidationComponent />,
+};
+
+const InteractiveWithValidationComponent = () => {
+  const [code, setCode] = useState(`apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest`);
+  const [validation, setValidation] = useState<{ isValid: boolean; error?: string } | null>(null);
+
+  const handleValidate = () => {
+    const result = parseYaml(code);
+    setValidation({
+      isValid: result.isValid,
+      error: result.error,
+    });
+  };
+
+  const handlePrettify = () => {
+    const prettified = prettifyYaml(code);
+    setCode(prettified);
+  };
+
+  return (
+    <Stack hasGutter>
+      <StackItem>
+        <YamlCodeEditor
+          code={code}
+          onChange={(value) => {
+            setCode(value);
+            setValidation(null);
+          }}
+          height="400px"
+        />
+      </StackItem>
+      <StackItem>
+        <Stack hasGutter>
+          <StackItem>
+            <Button onClick={handleValidate} variant="primary">
+              Validate YAML
+            </Button>{' '}
+            <Button onClick={handlePrettify} variant="secondary">
+              Prettify YAML
+            </Button>
+          </StackItem>
+          {validation && (
+            <StackItem>
+              <Alert
+                variant={validation.isValid ? 'success' : 'danger'}
+                title={validation.isValid ? 'Valid YAML' : 'Invalid YAML'}
+                isInline
+              >
+                {validation.error || 'YAML is valid and can be parsed successfully.'}
+              </Alert>
+            </StackItem>
+          )}
+        </Stack>
+      </StackItem>
+    </Stack>
+  );
 };
 
 export const InteractiveWithValidation: Story = {
-  render: () => {
-    const [code, setCode] = useState(`apiVersion: v1
-kind: Pod
-metadata:
-  name: test-pod
-spec:
-  containers:
-  - name: nginx
-    image: nginx:latest`);
-    const [validation, setValidation] = useState<{ isValid: boolean; error?: string } | null>(null);
-
-    const handleValidate = () => {
-      const result = parseYaml(code);
-      setValidation({
-        isValid: result.isValid,
-        error: result.error,
-      });
-    };
-
-    const handlePrettify = () => {
-      const prettified = prettifyYaml(code);
-      setCode(prettified);
-    };
-
-    return (
-      <Stack hasGutter>
-        <StackItem>
-          <YamlCodeEditor
-            code={code}
-            onChange={(value) => {
-              setCode(value);
-              setValidation(null);
-            }}
-            height="400px"
-          />
-        </StackItem>
-        <StackItem>
-          <Stack hasGutter>
-            <StackItem>
-              <Button onClick={handleValidate} variant="primary">
-                Validate YAML
-              </Button>{' '}
-              <Button onClick={handlePrettify} variant="secondary">
-                Prettify YAML
-              </Button>
-            </StackItem>
-            {validation && (
-              <StackItem>
-                <Alert
-                  variant={validation.isValid ? 'success' : 'danger'}
-                  title={validation.isValid ? 'Valid YAML' : 'Invalid YAML'}
-                  isInline
-                >
-                  {validation.error || 'YAML is valid and can be parsed successfully.'}
-                </Alert>
-              </StackItem>
-            )}
-          </Stack>
-        </StackItem>
-      </Stack>
-    );
-  },
+  render: () => <InteractiveWithValidationComponent />,
 };
 
 export const CompactEditor: Story = {
