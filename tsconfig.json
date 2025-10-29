@@ -28,13 +28,6 @@
     "exclude": [
         "node_modules",
         "dist",
-        "packages/**/*",
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "**/*.stories.ts",
-        "**/*.stories.tsx",
-        "**/examples/**"
+        "packages/**/*"
     ]
 }
