@@ -37,7 +37,7 @@ export const YamlCodeEditor: React.FC<YamlCodeEditorProps> = ({
     if (textareaRef.current) {
       const scrollTop = textareaRef.current.scrollTop;
       const scrollLeft = textareaRef.current.scrollLeft;
-      
+
       if (lineNumbersRef.current) {
         lineNumbersRef.current.scrollTop = scrollTop;
       }
@@ -62,7 +62,7 @@ export const YamlCodeEditor: React.FC<YamlCodeEditorProps> = ({
       if (event.shiftKey) {
         const lineStart = value.lastIndexOf('\n', start - 1) + 1;
         const lineBeforeSelection = value.substring(lineStart, start);
-        
+
         if (lineBeforeSelection.startsWith('  ')) {
           const newValue = value.substring(0, lineStart) + value.substring(lineStart + 2);
           if (onChange) {
@@ -129,4 +129,3 @@ export const YamlCodeEditor: React.FC<YamlCodeEditorProps> = ({
     </div>
   );
 };
-

@@ -269,13 +269,6 @@ data:
 export const WithoutSyntaxHighlighting: Story = {
   render: () => {
     const [code, setCode] = useState(sampleYaml);
-    return (
-      <YamlCodeEditor
-        code={code}
-        onChange={setCode}
-        enableSyntaxHighlighting={false}
-      />
-    );
+    return <YamlCodeEditor code={code} onChange={setCode} enableSyntaxHighlighting={false} />;
   },
 };
-

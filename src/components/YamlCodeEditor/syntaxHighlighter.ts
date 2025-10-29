@@ -26,32 +26,26 @@ export function highlightYaml(code: string): string {
 
     // YAML directives (---, ...) - must be first
     if (/^(---|\.\.\.)\s*$/.test(highlighted)) {
-      return highlighted.replace(
-        /^(---|\.\.\.)/,
-        '<span class="yaml-directive">$1</span>'
-      );
+      return highlighted.replace(/^(---|\.\.\.)/, '<span class="yaml-directive">$1</span>');
     }
 
     // Comments (entire line or inline)
     if (highlighted.trim().startsWith('#')) {
       return `<span class="yaml-comment">${highlighted}</span>`;
     }
-    
+
     // Split inline comments
     const commentMatch = highlighted.match(/^(.+?)(#.*)$/);
     let mainPart = highlighted;
     let commentPart = '';
-    
+
     if (commentMatch) {
       mainPart = commentMatch[1];
       commentPart = `<span class="yaml-comment">${commentMatch[2]}</span>`;
     }
 
     // List items (lines with dash)
-    mainPart = mainPart.replace(
-      /^(\s*)(-)(\s+)/,
-      '$1<span class="yaml-punctuation">$2</span>$3'
-    );
+    mainPart = mainPart.replace(/^(\s*)(-)(\s+)/, '$1<span class="yaml-punctuation">$2</span>$3');
 
     // YAML keys (word followed by colon) - handle quoted strings in values first to avoid conflicts
     const keyMatch = mainPart.match(/^(\s*)([a-zA-Z0-9_-]+)(\s*)(:)(.*)$/);
@@ -74,16 +68,13 @@ export function highlightYaml(code: string): string {
       );
 
       // Anchors and aliases (avoid matching HTML entities like &lt; &gt; &quot; &amp;)
-      value = value.replace(
-        /([&*])([a-zA-Z][a-zA-Z0-9_-]*)/g,
-        (match, prefix, name) => {
-          // Don't highlight HTML entities
-          if (prefix === '&' && ['lt', 'gt', 'quot', 'amp', '#039'].includes(name)) {
-            return match;
-          }
-          return `<span class="yaml-anchor">${prefix}${name}</span>`;
+      value = value.replace(/([&*])([a-zA-Z][a-zA-Z0-9_-]*)/g, (match, prefix, name) => {
+        // Don't highlight HTML entities
+        if (prefix === '&' && ['lt', 'gt', 'quot', 'amp', '#039'].includes(name)) {
+          return match;
         }
-      );
+        return `<span class="yaml-anchor">${prefix}${name}</span>`;
+      });
 
       // Boolean values (only if not already in a span)
       value = value.replace(
@@ -93,10 +84,7 @@ export function highlightYaml(code: string): string {
 
       // Numbers (only if not already in a span)
       if (!value.includes('<span')) {
-        value = value.replace(
-          /^\s*(-?\d+\.?\d*)\s*$/,
-          ' <span class="yaml-number">$1</span>'
-        );
+        value = value.replace(/^\s*(-?\d+\.?\d*)\s*$/, ' <span class="yaml-number">$1</span>');
       }
 
       mainPart = `${indent}<span class="yaml-key">${key}</span>${space}<span class="yaml-punctuation">${colon}</span>${value}`;
@@ -115,4 +103,3 @@ export function highlightYaml(code: string): string {
 export function stripHighlighting(html: string): string {
   return html.replace(/<[^>]*>/g, '');
 }
-

@@ -66,9 +66,9 @@ describe('YamlCodeEditor', () => {
     const handleChange = jest.fn();
     render(<YamlCodeEditor code="" onChange={handleChange} />);
     const textarea = screen.getByRole('textbox');
-    
+
     fireEvent.keyDown(textarea, { key: 'Tab', code: 'Tab' });
-    
+
     expect(handleChange).toHaveBeenCalledWith('  ');
   });
 });
@@ -160,4 +160,3 @@ describe('yamlUtils', () => {
     });
   });
 });
-

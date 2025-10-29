@@ -79,7 +79,8 @@ root:
 
   describe('stripHighlighting', () => {
     it('removes HTML tags from highlighted code', () => {
-      const highlighted = '<span class="yaml-key">name</span>: <span class="yaml-string">"test"</span>';
+      const highlighted =
+        '<span class="yaml-key">name</span>: <span class="yaml-string">"test"</span>';
       const result = stripHighlighting(highlighted);
       expect(result).toBe('name: "test"');
     });
@@ -97,4 +98,3 @@ root:
     });
   });
 });
-
