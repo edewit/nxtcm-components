@@ -2,7 +2,7 @@ export const config = {
   content: [
     {
       base: "src",
-      pattern: "**/examples/**/*.mdx",
+      pattern: "**/examples/**/*.md",
       name: "nxtcm-components-docs",
     },
   ],

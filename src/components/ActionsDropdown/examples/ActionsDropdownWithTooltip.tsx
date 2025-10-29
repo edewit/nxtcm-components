@@ -1,4 +1,5 @@
 import { ActionsDropdown } from '../';
+import { TooltipPosition } from '@patternfly/react-core';
 
 export const ActionsDropdownBasic = () => {
   const onSelect = () => {
@@ -7,7 +8,9 @@ export const ActionsDropdownBasic = () => {
 
   return (
     <ActionsDropdown
-      id="test-basic"
+      id="test-tooltip"
+      tooltip="This is a tooltip"
+      tooltipPosition={TooltipPosition.bottom}
       dropdownItems={[
         { id: 'item1', text: 'Item One', onSelect },
         { id: 'item2', text: 'Item Two', isDisabled: true, onSelect },
