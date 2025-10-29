@@ -1,6 +1,6 @@
-import React from "react";
-import { Card, CardTitle, CardBody, CardFooter } from "@patternfly/react-core";
-import styles from "./StorageCard.module.scss";
+import React from 'react';
+import { Card, CardTitle, CardBody, CardFooter } from '@patternfly/react-core';
+import styles from './StorageCard.module.scss';
 
 export interface StorageData {
   /** storage usage by rosa clusters in tib */
@@ -24,10 +24,7 @@ export interface StorageCardProps {
  * storage card displays storage usage statistics across different cluster types
  * with a visual percentage indicator
  */
-export const StorageCard: React.FC<StorageCardProps> = ({
-  storageData,
-  onViewMore,
-}) => {
+export const StorageCard: React.FC<StorageCardProps> = ({ storageData, onViewMore }) => {
   const { rosaClusters, aroClusters, osdClusters, available } = storageData;
 
   // calculate totals
@@ -49,14 +46,7 @@ export const StorageCard: React.FC<StorageCardProps> = ({
           <div className={styles.circularProgress}>
             <svg width="200" height="200" viewBox="0 0 200 200">
               {/* background circle */}
-              <circle
-                cx="100"
-                cy="100"
-                r={radius}
-                fill="none"
-                stroke="#d2d2d2"
-                strokeWidth="16"
-              />
+              <circle cx="100" cy="100" r={radius} fill="none" stroke="#d2d2d2" strokeWidth="16" />
               {/* progress circle */}
               <circle
                 cx="100"
@@ -74,18 +64,14 @@ export const StorageCard: React.FC<StorageCardProps> = ({
             </svg>
             <div className={styles.percentageLabel}>
               <div className={styles.percentage}>{usagePercentage}%</div>
-              <div className={styles.sublabel}>
-                of {totalStorage.toFixed(2)} TiB used
-              </div>
+              <div className={styles.sublabel}>of {totalStorage.toFixed(2)} TiB used</div>
             </div>
           </div>
 
           {/* storage details */}
           <div className={styles.details}>
             <div className={styles.totalStorage}>
-              <div className={styles.totalValue}>
-                {totalUsed.toFixed(2)} TiB
-              </div>
+              <div className={styles.totalValue}>{totalUsed.toFixed(2)} TiB</div>
               <div className={styles.totalLabel}>Total storage used</div>
             </div>
 
@@ -93,23 +79,17 @@ export const StorageCard: React.FC<StorageCardProps> = ({
               <div className={styles.breakdownItem}>
                 <span className={`${styles.dot} ${styles.rosaDot}`}></span>
                 <span className={styles.label}>ROSA clusters:</span>
-                <span className={styles.value}>
-                  {rosaClusters.toFixed(2)} TiB
-                </span>
+                <span className={styles.value}>{rosaClusters.toFixed(2)} TiB</span>
               </div>
               <div className={styles.breakdownItem}>
                 <span className={`${styles.dot} ${styles.aroDot}`}></span>
                 <span className={styles.label}>ARO Clusters:</span>
-                <span className={styles.value}>
-                  {aroClusters.toFixed(2)} TiB
-                </span>
+                <span className={styles.value}>{aroClusters.toFixed(2)} TiB</span>
               </div>
               <div className={styles.breakdownItem}>
                 <span className={`${styles.dot} ${styles.osdDot}`}></span>
                 <span className={styles.label}>OSD Clusters:</span>
-                <span className={styles.value}>
-                  {osdClusters.toFixed(2)} TiB
-                </span>
+                <span className={styles.value}>{osdClusters.toFixed(2)} TiB</span>
               </div>
               <div className={styles.breakdownItem}>
                 <span className={styles.label}>Available:</span>

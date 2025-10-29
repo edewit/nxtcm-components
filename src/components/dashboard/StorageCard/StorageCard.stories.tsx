@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { StorageCard } from "./StorageCard";
+import type { Meta, StoryObj } from '@storybook/react';
+import { StorageCard } from './StorageCard';
 
 const meta: Meta<typeof StorageCard> = {
-  title: "Dashboard/StorageCard",
+  title: 'Dashboard/StorageCard',
   component: StorageCard,
   parameters: {
-    layout: "padded",
+    layout: 'padded',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
     // default to undefined - stories must explicitly provide onViewMore callback
     onViewMore: undefined,
@@ -37,7 +37,7 @@ export const WithViewMore: Story = {
       osdClusters: 2.17,
       available: 21.89,
     },
-    onViewMore: () => alert("View more clicked!"),
+    onViewMore: () => alert('View more clicked!'),
   },
 };
 
