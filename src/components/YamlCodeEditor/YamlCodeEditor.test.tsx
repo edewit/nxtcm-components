@@ -79,7 +79,7 @@ describe('parseYaml', () => {
   it('parses valid YAML', () => {
     const yamlString = 'name: test\nvalue: 123';
     const result = parseYaml(yamlString);
-    
+
     expect(result.isValid).toBe(true);
     expect(result.data).toEqual({ name: 'test', value: 123 });
     expect(result.error).toBeUndefined();
@@ -88,14 +88,14 @@ describe('parseYaml', () => {
   it('handles invalid YAML', () => {
     const yamlString = 'name: test\n  invalid: : syntax';
     const result = parseYaml(yamlString);
-    
+
     expect(result.isValid).toBe(false);
     expect(result.error).toBeDefined();
   });
 
   it('handles empty string', () => {
     const result = parseYaml('');
-    
+
     expect(result.isValid).toBe(true);
     expect(result.data).toBeUndefined();
   });
@@ -111,7 +111,7 @@ data:
   key2: value2
 `;
     const result = parseYaml(yamlString);
-    
+
     expect(result.isValid).toBe(true);
     expect(result.data).toHaveProperty('apiVersion', 'v1');
     expect(result.data).toHaveProperty('kind', 'ConfigMap');
@@ -122,7 +122,7 @@ describe('prettifyYaml', () => {
   it('prettifies valid YAML with default indentation', () => {
     const yamlString = 'name: test\nvalue: 123\nnested:\n  key: value';
     const prettified = prettifyYaml(yamlString);
-    
+
     expect(prettified).toContain('name: test');
     expect(prettified).toContain('value: 123');
   });
@@ -130,7 +130,7 @@ describe('prettifyYaml', () => {
   it('prettifies YAML with custom indentation', () => {
     const yamlString = 'name: test\nnested:\n  key: value';
     const prettified = prettifyYaml(yamlString, 4);
-    
+
     expect(prettified).toBeDefined();
     expect(prettified).toContain('name: test');
   });
@@ -138,7 +138,7 @@ describe('prettifyYaml', () => {
   it('returns original string for invalid YAML', () => {
     const invalidYaml = 'invalid: : syntax';
     const result = prettifyYaml(invalidYaml);
-    
+
     expect(result).toBe(invalidYaml);
   });
 
@@ -152,7 +152,7 @@ describe('objectToYaml', () => {
   it('converts object to YAML', () => {
     const obj = { name: 'test', value: 123 };
     const yaml = objectToYaml(obj);
-    
+
     expect(yaml).toContain('name: test');
     expect(yaml).toContain('value: 123');
   });
@@ -166,7 +166,7 @@ describe('objectToYaml', () => {
       },
     };
     const yaml = objectToYaml(obj);
-    
+
     expect(yaml).toContain('name: test');
     expect(yaml).toContain('nested:');
     expect(yaml).toContain('key: value');
@@ -177,7 +177,7 @@ describe('objectToYaml', () => {
       items: ['item1', 'item2', 'item3'],
     };
     const yaml = objectToYaml(obj);
-    
+
     expect(yaml).toContain('items:');
     expect(yaml).toContain('- item1');
     expect(yaml).toContain('- item2');
@@ -199,4 +199,3 @@ describe('isValidYaml', () => {
     expect(isValidYaml('')).toBe(true);
   });
 });
-

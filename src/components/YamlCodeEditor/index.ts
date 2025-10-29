@@ -5,8 +5,4 @@ export {
   objectToYaml,
   isValidYaml,
 } from './YamlCodeEditor';
-export type {
-  YamlCodeEditorProps,
-  YamlParseResult,
-} from './YamlCodeEditor';
-
+export type { YamlCodeEditorProps, YamlParseResult } from './YamlCodeEditor';

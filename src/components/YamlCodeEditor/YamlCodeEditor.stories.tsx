@@ -212,4 +212,3 @@ export const EmptyEditor: Story = {
     height: '300px',
   },
 };
-

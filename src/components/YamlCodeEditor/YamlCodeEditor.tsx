@@ -1,10 +1,6 @@
-import {
-  CodeEditor,
-  CodeEditorProps,
-  Language,
-} from "@patternfly/react-code-editor";
-import { useState, useEffect, useRef } from "react";
-import * as yaml from "js-yaml";
+import { CodeEditor, CodeEditorProps, Language } from '@patternfly/react-code-editor';
+import { useState, useEffect, useRef } from 'react';
+import * as yaml from 'js-yaml';
 
 export interface YamlParseResult {
   isValid: boolean;
@@ -13,7 +9,7 @@ export interface YamlParseResult {
   errorLine?: number;
 }
 
-export type YamlCodeEditorProps = Omit<CodeEditorProps, "onChange"> & {
+export type YamlCodeEditorProps = Omit<CodeEditorProps, 'onChange'> & {
   /** The YAML content to display in the editor */
   code?: string;
   /** Callback when the code changes */
@@ -22,7 +18,7 @@ export type YamlCodeEditorProps = Omit<CodeEditorProps, "onChange"> & {
   onValidate?: (result: YamlParseResult) => void;
   /** Debounce delay in milliseconds for auto-validation (default: 500) */
   debounceDelay?: number;
-  "data-testid"?: string;
+  'data-testid'?: string;
 };
 
 /**
@@ -31,7 +27,7 @@ export type YamlCodeEditorProps = Omit<CodeEditorProps, "onChange"> & {
  * @returns Object containing parse result and any errors
  */
 export function parseYaml(yamlString: string): YamlParseResult {
-  if (!yamlString || yamlString.trim() === "") {
+  if (!yamlString || yamlString.trim() === '') {
     return {
       isValid: true,
       data: undefined,
@@ -60,11 +56,8 @@ export function parseYaml(yamlString: string): YamlParseResult {
  * @param indent - Number of spaces for indentation (default: 2)
  * @returns Formatted YAML string, or original string if invalid
  */
-export function prettifyYaml(
-  yamlString: string,
-  indent: number = 2
-): string {
-  if (!yamlString || yamlString.trim() === "") {
+export function prettifyYaml(yamlString: string, indent: number = 2): string {
+  if (!yamlString || yamlString.trim() === '') {
     return yamlString;
   }
 
@@ -78,7 +71,7 @@ export function prettifyYaml(
     });
   } catch (error) {
     // If parsing fails, return the original string
-    console.error("Failed to prettify YAML:", error);
+    console.error('Failed to prettify YAML:', error);
     return yamlString;
   }
 }
@@ -98,8 +91,8 @@ export function objectToYaml(obj: any, indent: number = 2): string {
       sortKeys: false,
     });
   } catch (error) {
-    console.error("Failed to convert object to YAML:", error);
-    return "";
+    console.error('Failed to convert object to YAML:', error);
+    return '';
   }
 }
 
@@ -113,11 +106,11 @@ export function isValidYaml(yamlString: string): boolean {
 }
 
 export const YamlCodeEditor = ({
-  code = "",
+  code = '',
   onChange,
   onValidate,
   debounceDelay = 500,
-  "data-testid": dataTestId,
+  'data-testid': dataTestId,
   ...props
 }: YamlCodeEditorProps) => {
   const [editorValue, setEditorValue] = useState(code);
