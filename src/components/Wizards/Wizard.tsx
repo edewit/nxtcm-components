@@ -1,7 +1,5 @@
 import { Wizard, WizardStep } from '@patternfly/react-core';
 import { StepId, StepName } from './constants';
-// TODO: Add BillingModelStep when implemented
-// import { BillingModelStep } from './Steps/BillingModel/BillingModelStep';
 
 export type NxtcmWizardProp = {
   navigate: (url: string) => void;
