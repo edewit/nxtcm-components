@@ -6,19 +6,14 @@ import {
   PanelHeader,
   PanelMain,
   PanelMainBody,
-  Title
-} from "@patternfly/react-core";
-import BellIcon from "@patternfly/react-icons/dist/esm/icons/bell-icon";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
-import React, { useState } from "react";
-import styles from "./NotificationsPanel.module.scss";
+  Title,
+} from '@patternfly/react-core';
+import BellIcon from '@patternfly/react-icons/dist/esm/icons/bell-icon';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import React, { useState } from 'react';
+import styles from './NotificationsPanel.module.scss';
 
-export type NotificationType =
-  | "Security"
-  | "Advisor"
-  | "Update risks"
-  | "Status"
-  | string;
+export type NotificationType = 'Security' | 'Advisor' | 'Update risks' | 'Status';
 
 export type NotificationItem = {
   id: string | number;
@@ -81,7 +76,8 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
           <span className={styles.headerTitle}>New notifications</span>
         </div>
         <div className={styles.headerBadge}>
-          <BellIcon />&nbsp;
+          <BellIcon />
+          &nbsp;
           {totalItems}
         </div>
       </PanelHeader>
@@ -105,9 +101,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                     className={styles.clickableRow}
                   >
                     <Td dataLabel="Notification">
-                      <span className={styles.notificationTitle}>
-                        {notification.title}
-                      </span>
+                      <span className={styles.notificationTitle}>{notification.title}</span>
                     </Td>
                     <Td dataLabel="Type">{notification.type}</Td>
                     <Td dataLabel="Time">{notification.time}</Td>

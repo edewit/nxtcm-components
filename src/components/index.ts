@@ -7,5 +7,5 @@ export * from './ConsoleBreadcrumbs';
 export * from './PageHeader';
 export * from './Wizards';
 export * from './YamlCodeEditor';
+export * from './dashboard/NotificationsPanel';
 export * from './dashboard/StorageCard';
-export * from './NotificationsPanel';
