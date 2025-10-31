@@ -9,3 +9,5 @@ export * from './Wizards';
 export * from './YamlCodeEditor';
 export * from './dashboard/NotificationsPanel';
 export * from './dashboard/StorageCard';
+export * from './dashboard/CVECard';
+export * from './dashboard/UpgradeRisks';
