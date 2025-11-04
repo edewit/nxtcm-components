@@ -39,7 +39,8 @@ export const NetworkingAndSubnetsSubStep = (props: any) => {
         },
       });
     }
-  }, [cluster?.cluster_privacy]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cluster]);
 
   return (
     <>

@@ -3,7 +3,7 @@ import { CopyInstruction } from './CopyInstruction';
 import { TabGroup } from './TabGroup';
 import PopoverHintWithTitle from './PopoverHitWithTitle';
 
-export const OCMRole = (props: any) => {
+export const OCMRole = () => {
   return (
     <>
       <Title headingLevel="h3" className="pf-v6-u-mb-md" size="md">

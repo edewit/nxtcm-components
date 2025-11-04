@@ -20,9 +20,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Run ESLint
         run: npm run lint
@@ -43,9 +43,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Run TypeScript type checking
         run: npm run type-check
@@ -63,9 +63,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -94,9 +94,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Build library
         run: npm run build
@@ -121,9 +121,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -152,9 +152,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install subpackage dependencies
-        run: cd packages/react-form-wizard && npm install
+        run: cd packages/react-form-wizard && npm ci
 
       - name: Build Storybook
         run: npm run build-storybook

@@ -352,12 +352,12 @@ function MyFooter(props: WizardFooterProps) {
     close: onClose,
   } = useWizardContext();
 
-  const test = useWizardContext();
+  const wizContext = useWizardContext();
 
-  console.log("ACTIVESTEP", test)
+  console.log("ACTIVESTEP", wizContext)
 
   useEffect(() => {
-    props.setUseWizardContext(test);
+    props.setUseWizardContext(wizContext);
   }, [props.setUseWizardContext])
 
   const [submitting, setSubmitting] = useState(false);
@@ -524,6 +524,11 @@ function MyFooter(props: WizardFooterProps) {
         >
           {nextButtonText}
         </Button>
+        {
+          (wizContext.activeStep.index == 6 || wizContext.activeStep.index == 7 || wizContext.activeStep.index == 8) && (
+            <Button variant="secondary" onClick={() => wizContext.goToStepById("review-step")}>SKIP TO REVIEW</Button>
+          )
+        }
         <Button
           variant="secondary"
           onClick={() => {

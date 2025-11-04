@@ -49,6 +49,7 @@ type WizSelectCommonProps<T> = InputCommonProps<T> & {
   keyPath?: string;
   isCreatable?: boolean;
   onCreate?: (value: string) => void;
+  callbackFunction?: (value: unknown) => void;
 };
 
 interface WizSelectSingleProps<T> extends WizSelectCommonProps<T> {
@@ -73,6 +74,7 @@ function WizSelectBase<T = any>(props: SelectProps<T>) {
     disabled,
     required,
   } = useInput(props);
+
   const { noResults } = useStringContext();
   const placeholder = getSelectPlaceholder(props);
   const keyPath = props.keyPath ?? props.path;
@@ -148,6 +150,7 @@ function WizSelectBase<T = any>(props: SelectProps<T>) {
     (selectOptionObject: string | undefined) => {
       const idOption = selectOptions?.find((o) => o.id === selectOptionObject);
       if (idOption) {
+        props.callbackFunction?.(idOption.value)
         setValue(idOption.value);
       } else {
         setValue(selectOptionObject);

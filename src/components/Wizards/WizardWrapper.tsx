@@ -1,34 +1,25 @@
 import { WizardCancel, WizardSubmit } from '@patternfly-labs/react-form-wizard';
-import { ProductName } from './constants';
 import { RosaWizard } from './RosaWizard/RosaWizard';
 
-interface BaseProductProps {
-  type: ProductName;
+type WizardWrapperProps = {
+  type: string;
   onSubmit: WizardSubmit;
   onCancel: WizardCancel;
-  history: any;
   title: string;
   defaultData: any;
   stepProps: any;
-}
-
-type WizardWrapperProps<T extends BaseProductProps> = {
-  product: T;
-  wizardsStepsData: T;
+  wizardsStepsData: any;
 };
 
-export const WizardWrapper = <T extends BaseProductProps>({
-  product,
-  wizardsStepsData,
-}: WizardWrapperProps<T>) => {
-  switch (product.type) {
-    case ProductName.RosaClassic:
+export const WizardWrapper: React.FunctionComponent<WizardWrapperProps> = (props) => {
+  switch (props.type) {
+    case 'rosa-hcp':
       return (
         <RosaWizard
-          wizardsStepsData={wizardsStepsData}
-          onSubmit={product.onSubmit}
-          onCancel={product.onCancel}
-          title={product.title}
+          wizardsStepsData={props.wizardsStepsData}
+          onSubmit={props.onSubmit}
+          onCancel={props.onCancel}
+          title={props.title}
         />
       );
   }

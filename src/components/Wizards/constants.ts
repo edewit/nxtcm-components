@@ -29,5 +29,5 @@ export enum StepId {
 }
 
 export enum ProductName {
-  RosaClassic = 'rosa-classic',
+  RosaHCP = 'rosa-hcp',
 }

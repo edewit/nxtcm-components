@@ -28,8 +28,6 @@ export const ReviewStepData = (props: any) => {
   const [isOptionalClusterUpgradesExpanded, setIsOptionalClusterUpgradesExpanded] =
     React.useState<boolean>(true);
 
-  console.log('DATA IN REVIEWSTEPDATA', cluster);
-
   return (
     <Section label="Review your ROSA cluster">
       <Alert

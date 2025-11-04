@@ -31,6 +31,7 @@ export const TabGroup: React.FunctionComponent<ToggleGroupTabsProps> = ({ tabs }
         <ToggleGroup>
           {tabs.map((tab) => (
             <ToggleGroupItem
+              key={tab.id}
               text={tab.title}
               buttonId={tab.id}
               isSelected={isSelected === tab.id}

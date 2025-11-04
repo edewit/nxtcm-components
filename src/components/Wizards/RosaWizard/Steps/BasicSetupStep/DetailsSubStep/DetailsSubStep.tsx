@@ -1,5 +1,5 @@
 import { Section, WizSelect, WizTextInput } from '@patternfly-labs/react-form-wizard';
-import { Button, Stack, StackItem, useWizardContext } from '@patternfly/react-core';
+import { Button, Stack, StackItem } from '@patternfly/react-core';
 import React from 'react';
 import { StepDrawer } from '../../../common/StepDrawer';
 import { SelectDropdownType } from '../../../../types';
@@ -9,6 +9,7 @@ type DetailsSubStepProps = {
   awsInfrastructureAccounts: SelectDropdownType[];
   awsBillingAccounts: SelectDropdownType[];
   regions: SelectDropdownType[];
+  awsAccountDataCallback: any;
 };
 
 export const DetailsSubStep: React.FunctionComponent<DetailsSubStepProps> = ({
@@ -16,13 +17,11 @@ export const DetailsSubStep: React.FunctionComponent<DetailsSubStepProps> = ({
   awsInfrastructureAccounts,
   awsBillingAccounts,
   regions,
+  awsAccountDataCallback,
 }) => {
   const [isDrawerExpanded, setIsDrawerExpanded] = React.useState<boolean>(false);
-  const { activeStep } = useWizardContext();
   const drawerRef = React.useRef<HTMLSpanElement>(null);
-
   const onWizardExpand = () => drawerRef.current && drawerRef.current.focus();
-
   return (
     <Section label="Details">
       <StepDrawer
@@ -54,10 +53,16 @@ export const DetailsSubStep: React.FunctionComponent<DetailsSubStepProps> = ({
           <StackItem>
             <WizSelect
               path="cluster.associated_aws_id"
-              label="Associaated AWS infrastructure account"
+              label="Associated AWS infrastructure account"
               placeholder="Select an AWS infrastructure account"
               labelHelp="Your cluster's cloud resources will be created in the associated AWS infrastructure account. To continue, you must associate at least 1 account."
               options={awsInfrastructureAccounts}
+              callbackFunction={awsAccountDataCallback}
+              onValueChange={(_value, item) => {
+                item.cluster.installer_role_arn = undefined;
+                item.cluster.worker_role_arn = undefined;
+                item.cluster.support_role_arn = undefined;
+              }}
               required
             />
             {!isDrawerExpanded && (
@@ -80,7 +85,7 @@ export const DetailsSubStep: React.FunctionComponent<DetailsSubStepProps> = ({
               options={awsBillingAccounts}
               required
             />
-            "LINK TO ASSOCIATE NEW BILLING ACCOUNT URL"
+            &quot;LINK TO ASSOCIATE NEW BILLING ACCOUNT URL&quot;
             {/* 
                     TODO: HERE GOES LINK WITH CONNECT A NEW AWS BILLING ACCOUNT
                 */}

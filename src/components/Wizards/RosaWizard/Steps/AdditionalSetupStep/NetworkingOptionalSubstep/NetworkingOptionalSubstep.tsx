@@ -12,6 +12,7 @@ export const NetworkingOptionalSubstep = (props: any) => {
 
   React.useEffect(() => {
     setIsClusterWideProxySelected(!!clusterWideProxy);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clusterWideProxy]);
 
   return (
@@ -41,7 +42,7 @@ export const NetworkingOptionalSubstep = (props: any) => {
         >
           <Content component={ContentVariants.p}>
             Specify non-overelapping ranges for machine, service, and pod ranges. Make sure that
-            your internal organization's networking ranges do not overlap with ours, which are
+            your internal organization&apos;s networking ranges do not overlap with ours, which are
             Kubernetes. Each range should correspond to the first IP address in their subnet.
           </Content>
 

@@ -9,17 +9,17 @@ export const ClusterUpdatesSubstep = () => {
       label="Cluster update strategy"
     >
       <Content component={ContentVariants.p}>
-        The OpenShift version [4.14.6] that you selected in the "HERE GOES LINK: Details step" will
-        apply to the managed control plane and the machine pools configured in the "HERE GOES LINK:
-        Networking and subnets step". After cluster creation, you can update the managed control
-        plane and machine pools independently.
+        The OpenShift version [4.14.6] that you selected in the &quot;HERE GOES LINK: Details
+        step&quot; will apply to the managed control plane and the machine pools configured in the
+        &quot;HERE GOES LINK: Networking and subnets step&quot;. After cluster creation, you can
+        update the managed control plane and machine pools independently.
       </Content>
 
       <Content component={ContentVariants.p}>
-        In the event of "HERE GOES LINK WITH EXTERNAL ICON: Critical security concerns" (CVEs) that
-        significantly impact the security or stability of the cluster, updates may be automatically
-        scheduled by Red Hat SRE to the latest z-stream version not impacted by the CVE within 2
-        business days after customer notifications.
+        In the event of &quot;HERE GOES LINK WITH EXTERNAL ICON: Critical security concerns&quot;
+        (CVEs) that significantly impact the security or stability of the cluster, updates may be
+        automatically scheduled by Red Hat SRE to the latest z-stream version not impacted by the
+        CVE within 2 business days after customer notifications.
       </Content>
 
       <WizRadioGroup path="cluster.upgrade_policy">

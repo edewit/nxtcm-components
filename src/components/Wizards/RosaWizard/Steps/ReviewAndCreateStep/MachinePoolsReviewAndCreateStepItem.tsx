@@ -33,9 +33,9 @@ export const MachinePoolsReviewAndCreateStepItem: React.FunctionComponent<
         </Flex>
       </StackItem>
 
-      {machinePools.map((machinePool: MachinePoolReviewAndCreateItem) => {
+      {machinePools.map((machinePool: MachinePoolReviewAndCreateItem, index: number) => {
         return (
-          <StackItem>
+          <StackItem key={index}>
             <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
               <FlexItem>{machinePool?.availability_zone}</FlexItem>
               <FlexItem>{machinePool?.public_subnet}</FlexItem>

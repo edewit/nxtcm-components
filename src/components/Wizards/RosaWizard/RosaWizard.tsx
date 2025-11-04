@@ -15,7 +15,6 @@ import {
   NetworkingAndSubnetsSubStep,
   RolesAndPoliciesSubStep,
 } from './Steps/BasicSetupStep';
-import { InputCommonProps } from '@patternfly-labs/react-form-wizard/inputs/Input';
 import React from 'react';
 import { ClusterWideProxySubstep } from './Steps/AdditionalSetupStep/ClusterWideProxySubstep/ClusterWideProxySubstep';
 import { ReviewStepData } from './Steps/ReviewStepData';
@@ -26,8 +25,6 @@ export type BasicSetupStepProps = {
   openShiftVersions: SelectDropdownType[];
   awsInfrastructureAccounts: SelectDropdownType[];
   awsBillingAccounts: SelectDropdownType[];
-  publicSubnets: SelectDropdownType[];
-  privateSubnets: SelectDropdownType[];
   vpcList: VPC[];
   regions: SelectDropdownType[];
   roles: Roles;
@@ -37,23 +34,26 @@ export type BasicSetupStepProps = {
 
 type WizardStepsData = {
   basicSetupStep: BasicSetupStepProps;
+  callbackFunctions?: any;
 };
 
-type RosaWizardProps = InputCommonProps & {
+type RosaWizardProps = {
   onSubmit: WizardSubmit;
   onCancel: WizardCancel;
   title: string;
   wizardsStepsData: WizardStepsData;
 };
 
-export const RosaWizard = (props: any) => {
+export const RosaWizard = (props: RosaWizardProps) => {
   const { onSubmit, onCancel, title, wizardsStepsData } = props;
   const [isClusterWideProxySelected, setIsClusterWideProxySelected] =
     React.useState<boolean>(false);
-  const [currentStep, setCurrentStep] = React.useState<WizardStepType>();
+  const [, setCurrentStep] = React.useState<WizardStepType>();
   const onStepChange = (_event: React.MouseEvent<HTMLButtonElement>, currentStep: WizardStepType) =>
     setCurrentStep(currentStep);
   const [getUseWizardContext, setUseWizardContext] = React.useState();
+
+  const callbackFunction = wizardsStepsData.callbackFunctions;
 
   return (
     <WizardPage
@@ -76,6 +76,7 @@ export const RosaWizard = (props: any) => {
               awsInfrastructureAccounts={wizardsStepsData.basicSetupStep.awsInfrastructureAccounts}
               awsBillingAccounts={wizardsStepsData.basicSetupStep.awsBillingAccounts}
               regions={wizardsStepsData.basicSetupStep.regions}
+              awsAccountDataCallback={callbackFunction.onAWSAccountChange}
             />
           </Step>,
           <Step
@@ -94,8 +95,6 @@ export const RosaWizard = (props: any) => {
             <NetworkingAndSubnetsSubStep
               machineTypes={wizardsStepsData.basicSetupStep.machineTypes}
               vpcList={wizardsStepsData.basicSetupStep.vpcList}
-              publicSubnets={wizardsStepsData.basicSetupStep.publicSubnets}
-              privateSubnets={wizardsStepsData.basicSetupStep.privateSubnets}
             />
           </Step>,
         ]}
@@ -144,7 +143,7 @@ export const RosaWizard = (props: any) => {
         ]}
       />
 
-      <Step label={'Review'} id={'review-step-id'}>
+      <Step label={'Review'} id={'review-step'}>
         <ReviewStepData goToStepId={getUseWizardContext} />
       </Step>
     </WizardPage>

@@ -22,6 +22,8 @@ export const RolesAndPoliciesSubStep: React.FunctionComponent<RolesAndPoliciesSu
   const [isArnsOpen, setIsArnsOpen] = React.useState<boolean>(false);
   const { cluster } = useItem();
 
+  const rosaCommand = `rosa create operator-roles --prefix "${cluster?.custom_operator_roles_prefix}" --oidc-config-id "${cluster?.byo_oidc_config_id}" --hosted-cp --installer-role-arn ${cluster?.installer_role_arn}`;
+
   return (
     <>
       <Section label="Account roles">
@@ -103,9 +105,7 @@ export const RolesAndPoliciesSubStep: React.FunctionComponent<RolesAndPoliciesSu
             clickTip="Copied"
             style={{ marginTop: '1rem' }}
           >
-            rosa create operator-roles --prefix "{cluster?.custom_operator_roles_prefix}"
-            --oidc-config-id "{cluster?.byo_oidc_config_id}" --hosted-cp --installer-role-arn{' '}
-            {cluster?.installer_role_arn}
+            {rosaCommand}
           </ClipboardCopy>
         </ExpandableSection>
       </Section>

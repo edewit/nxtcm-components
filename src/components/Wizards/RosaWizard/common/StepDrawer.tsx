@@ -63,7 +63,7 @@ export const StepDrawer = (props: any) => {
 
                   <StackItem>
                     <Content component={ContentVariants.p} className="pf-v6-u-mr-md">
-                      After you've completed all the steps, close this guide and choose your
+                      After you&apos;ve completed all the steps, close this guide and choose your
                       account.
                     </Content>
                   </StackItem>
