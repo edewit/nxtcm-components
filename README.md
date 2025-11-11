@@ -15,6 +15,14 @@ This repository provides reusable React components built with PatternFly that se
 - **Testing**: Comprehensive unit tests with Jest and React Testing Library
 - **Modern Tooling**: Vite, modern JavaScript features, and fast HMR
 
+## Documentation
+
+View our live component documentation and examples at:
+
+**https://redhatinsights.github.io/nxtcm-components/**
+
+The documentation site is automatically updated when changes are merged to the main branch and provides interactive examples of all components.
+
 ## Prerequisites
 
 - Node.js (version 20 recommended - see `.nvmrc`)

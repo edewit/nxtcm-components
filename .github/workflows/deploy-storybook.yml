@@ -1,0 +1,40 @@
+name: Deploy Storybook to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      # install main dependencies and subpackage dependencies
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd packages/react-form-wizard && npm ci
+
+      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+        with:
+          install_command: echo "Dependencies already installed"
+          build_command: npm run build-storybook
+          path: storybook-static
+          checkout: false
+        env:
+          STORYBOOK_BASE_PATH: /nxtcm-components/
+
