@@ -211,7 +211,7 @@ export const Default: Story = {
         vpcList: mockVPCs,
       },
       callbackFunctions: {
-        awsAccountDataCallback: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
       },
     },
   },
@@ -273,6 +273,9 @@ export const MinimalOptions: Story = {
         vpcList: mockVPCs,
         machineTypes: mockMachineTypes,
       },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
+      },
     },
   },
 };
@@ -300,6 +303,9 @@ export const EmptyOptions: Story = {
         oicdConfig: mockOicdConfig,
         machineTypes: mockMachineTypes,
         vpcList: mockVPCs,
+      },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
       },
     },
   },
@@ -338,6 +344,9 @@ export const ExtensiveOptions: Story = {
         regions: mockRegions,
         roles: mockRoles,
       },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
+      },
     },
   },
 };
@@ -365,6 +374,9 @@ export const CustomTitle: Story = {
         vpcList: mockVPCs,
         machineTypes: mockMachineTypes,
         oicdConfig: mockOicdConfig,
+      },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
       },
     },
   },
@@ -395,6 +407,9 @@ export const WithErrorHandling: Story = {
         vpcList: mockVPCs,
         oicdConfig: mockOicdConfig,
         machineTypes: mockMachineTypes,
+      },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
       },
     },
   },
@@ -462,6 +477,9 @@ export const ProductionSetup: Story = {
         oicdConfig: mockOicdConfig,
         machineTypes: mockMachineTypes,
         vpcList: mockVPCs,
+      },
+      callbackFunctions: {
+        onAWSAccountChange: () => console.log('AWS ACCOUNT CHANGE CALLBACK'),
       },
     },
   },
