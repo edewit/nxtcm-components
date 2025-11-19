@@ -160,9 +160,10 @@ spec:
     const textarea = component.getByRole('textbox');
 
     const newContent = 'key1: value1\nkey2: value2';
+
     await textarea.fill(newContent);
 
-    expect(currentValue).toBe(newContent);
+    await expect.poll(() => currentValue).toBe(newContent);
   });
 
   test('should not call onChange when readonly', async ({ mount }) => {
