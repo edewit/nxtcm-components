@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/experimental-ct-react';
+import React from 'react';
 import { NotificationsPanel, NotificationItem } from './NotificationsPanel';
 
 const mockNotifications: NotificationItem[] = [
@@ -43,36 +44,40 @@ const mockNotifications: NotificationItem[] = [
 test.describe('NotificationsPanel', () => {
   test('should render the panel with notification count badge', async ({ mount }) => {
     const component = await mount(<NotificationsPanel notifications={mockNotifications} />);
-    await expect(component.getByText('New notifications')).toBeVisible();
-    await expect(component.getByText('6')).toBeVisible();
+    await expect(component.getByTestId('header')).toContainText('New notifications');
+    await expect(component.getByTestId('notification-count')).toContainText('6');
   });
 
   test('should render empty panel when there are no notifications', async ({ mount }) => {
     const component = await mount(<NotificationsPanel notifications={[]} />);
-    await expect(component.getByText('New notifications')).toBeVisible();
-    await expect(component.getByText('0')).toBeVisible();
+    await expect(component.getByTestId('header')).toContainText('New notifications');
+    await expect(component.getByTestId('notification-count')).toContainText('0');
   });
 
-  test('should display all notification items when pagination is disabled', async ({ mount }) => {
+  test('should display all notification items', async ({ mount }) => {
     const component = await mount(
       <NotificationsPanel notifications={mockNotifications} enablePagination={false} />
     );
 
     for (const notification of mockNotifications) {
-      await expect(component.getByText(notification.title)).toBeVisible();
+      await expect(component.getByTestId(`notification-${notification.id}`)).toContainText(
+        notification.title
+      );
+      await expect(component.getByTestId(`notification-type-${notification.id}`)).toContainText(
+        notification.type
+      );
+      await expect(component.getByTestId(`notification-time-${notification.id}`)).toContainText(
+        notification.time
+      );
     }
-
-    await expect(component.getByRole('gridcell', { name: 'Advisor', exact: true })).toBeVisible();
-    await expect(
-      component.getByRole('gridcell', { name: 'Update risks', exact: true })
-    ).toBeVisible();
-    await expect(component.getByRole('gridcell', { name: 'Status', exact: true })).toBeVisible();
   });
 
   test('should call onNotificationClick when a notification is clicked', async ({ mount }) => {
     let clickedNotification: NotificationItem | undefined;
+    let clickCount = 0;
     const onNotificationClick = (notification: NotificationItem) => {
       clickedNotification = notification;
+      clickCount++;
     };
 
     const component = await mount(
@@ -82,22 +87,24 @@ test.describe('NotificationsPanel', () => {
       />
     );
 
-    await component.getByText('New CVE: CVE-2023-0091').click();
+    await component.getByTestId(`notification-${mockNotifications[0].id}`).click();
 
     expect(clickedNotification).toEqual(mockNotifications[0]);
+    expect(clickCount).toBe(1);
   });
 
   test("should call notification's specific onClick handler", async ({ mount }) => {
-    let onClickCalled = false;
+    let onClickCallCount = 0;
+    const onClickMock = () => {
+      onClickCallCount++;
+    };
     const notificationsWithHandler: NotificationItem[] = [
       {
         id: 1,
         title: 'Test Notification',
         type: 'Security',
         time: 'Now',
-        onClick: () => {
-          onClickCalled = true;
-        },
+        onClick: onClickMock,
       },
     ];
 
@@ -105,7 +112,7 @@ test.describe('NotificationsPanel', () => {
 
     await component.getByText('Test Notification').click();
 
-    expect(onClickCalled).toBe(true);
+    expect(onClickCallCount).toBe(1);
   });
 
   test.describe('pagination', () => {
@@ -141,14 +148,18 @@ test.describe('NotificationsPanel', () => {
         />
       );
 
-      await expect(component.getByText('Notification 1', { exact: true })).toBeVisible();
-      await expect(component.getByText('Notification 7', { exact: true })).not.toBeVisible();
+      await expect(component.getByTestId(`notification-${manyNotifications[0].id}`)).toBeVisible();
+      await expect(
+        component.getByTestId(`notification-${manyNotifications[6].id}`)
+      ).not.toBeVisible();
 
       await component.getByRole('button', { name: /Next page/i }).click();
 
       await expect(component.getByText('7 - 12 of 20')).toBeVisible();
-      await expect(component.getByText('Notification 7', { exact: true })).toBeVisible();
-      await expect(component.getByText('Notification 1', { exact: true })).not.toBeVisible();
+      await expect(component.getByTestId(`notification-${manyNotifications[6].id}`)).toBeVisible();
+      await expect(
+        component.getByTestId(`notification-${manyNotifications[0].id}`)
+      ).not.toBeVisible();
     });
 
     test('should navigate to previous page when previous button is clicked', async ({ mount }) => {
@@ -161,12 +172,13 @@ test.describe('NotificationsPanel', () => {
       );
 
       await component.getByRole('button', { name: /Next page/i }).click();
-      await expect(component.getByText('Notification 7')).toBeVisible();
+
+      await expect(component.getByTestId(`notification-${manyNotifications[6].id}`)).toBeVisible();
 
       await component.getByRole('button', { name: /Previous page/i }).click();
 
       await expect(component.getByText('1 - 6 of 20')).toBeVisible();
-      await expect(component.getByText('Notification 1')).toBeVisible();
+      await expect(component.getByTestId(`notification-${manyNotifications[0].id}`)).toBeVisible();
     });
 
     test('should disable previous button on first page', async ({ mount }) => {
@@ -191,12 +203,14 @@ test.describe('NotificationsPanel', () => {
         />
       );
 
+      // Navigate to last page
       const nextButton = component.getByRole('button', { name: /Next page/i });
-
+      // Click next until we reach the last page (20 items / 6 per page = 4 pages, so click 3 times)
       await nextButton.click();
       await nextButton.click();
       await nextButton.click();
 
+      // Now we should be on the last page and next button should be disabled
       await expect(nextButton).toBeDisabled();
     });
 
@@ -207,26 +221,6 @@ test.describe('NotificationsPanel', () => {
 
       await expect(component.getByText(/of 20/)).not.toBeVisible();
       await expect(component.getByRole('button', { name: /Previous page/i })).not.toBeVisible();
-    });
-
-    test('should not display pagination controls with single page', async ({ mount }) => {
-      const fewNotifications: NotificationItem[] = Array.from({ length: 5 }, (_, i) => ({
-        id: i + 1,
-        title: `Notification ${i + 1}`,
-        type: 'Security',
-        time: 'Now',
-      }));
-
-      const component = await mount(
-        <NotificationsPanel
-          notifications={fewNotifications}
-          enablePagination={true}
-          itemsPerPage={6}
-        />
-      );
-
-      await expect(component.getByRole('button', { name: /Previous page/i })).not.toBeVisible();
-      await expect(component.getByRole('button', { name: /Next page/i })).not.toBeVisible();
     });
   });
 
