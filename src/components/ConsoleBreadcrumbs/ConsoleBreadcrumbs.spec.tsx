@@ -39,16 +39,15 @@ test.describe('ConsoleBreadcrumbs', () => {
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
     // Check for the navigation landmark
-    const nav = page.locator('nav');
+    const nav = page.getByRole('navigation', { name: 'Breadcrumb' });
     await expect(nav).toBeVisible();
-    await expect(nav).toHaveAttribute('aria-label', 'Breadcrumb');
 
     // Check that breadcrumb items are rendered
-    const breadcrumbList = page.locator('.pf-v6-c-breadcrumb__list');
+    const breadcrumbList = nav.getByRole('list');
     await expect(breadcrumbList).toBeVisible();
 
     // Verify we have the correct number of breadcrumb items
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = nav.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(3);
 
     // The last item should be marked as active
@@ -76,7 +75,7 @@ test.describe('ConsoleBreadcrumbs', () => {
     );
 
     // Verify breadcrumbs render
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
 
     // Last item should be active
@@ -88,7 +87,7 @@ test.describe('ConsoleBreadcrumbs', () => {
     const singleItem: SampleItem[] = [{ id: 1, title: 'Home', url: '/' }];
     let component = await mount(<ConsoleBreadcrumbs {...getProps(singleItem)} />);
 
-    let breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    let breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(1);
     await expect(breadcrumbItems.first()).toHaveAttribute('aria-current', 'page');
 
@@ -103,7 +102,7 @@ test.describe('ConsoleBreadcrumbs', () => {
     ];
     component = await mount(<ConsoleBreadcrumbs {...getProps(multipleItems)} />);
 
-    breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(4);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -119,7 +118,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -135,7 +134,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -147,7 +146,7 @@ test.describe('ConsoleBreadcrumbs', () => {
     ];
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -162,7 +161,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(longPath)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(11);
   });
 
@@ -175,7 +174,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(specialItems)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(3);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -191,7 +190,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -204,7 +203,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const nav = page.locator('nav[aria-label="Breadcrumb"]');
+    const nav = page.getByRole('navigation', { name: 'Breadcrumb' });
     await expect(nav).toBeVisible();
   });
 
@@ -218,7 +217,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(4);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -231,7 +230,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(2);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -246,7 +245,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(4);
     await expect(breadcrumbItems.last()).toHaveAttribute('aria-current', 'page');
   });
@@ -260,7 +259,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
     await expect(breadcrumbItems).toHaveCount(3);
   });
 
@@ -273,7 +272,7 @@ test.describe('ConsoleBreadcrumbs', () => {
 
     await mount(<ConsoleBreadcrumbs {...getProps(items)} />);
 
-    const breadcrumbItems = page.locator('.pf-v6-c-breadcrumb__item');
+    const breadcrumbItems = page.getByRole('listitem');
 
     await expect(breadcrumbItems.nth(0)).not.toHaveAttribute('aria-current', 'page');
     await expect(breadcrumbItems.nth(1)).not.toHaveAttribute('aria-current', 'page');
