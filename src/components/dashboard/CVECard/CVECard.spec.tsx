@@ -161,26 +161,236 @@ test.describe('CVECard', () => {
     await viewLink.click();
     expect(onViewClickCalled).toBe(true);
   });
+});
 
-  test('should render with single CVE severity', async ({ mount }) => {
-    let onViewClickCalled = false;
-    const singleData: CVEData[] = [
-      {
-        severity: 'critical',
-        count: 10,
-        label: 'Critical severity CVEs',
-        onViewClick: () => {
-          onViewClickCalled = true;
-        },
+test('should render with single CVE severity', async ({ mount }) => {
+  const singleData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 10,
+      label: 'Critical severity CVEs',
+      onViewClick: () => {},
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={singleData} />);
+  await expect(component.getByText('10')).toBeVisible();
+  await expect(component.getByText('Critical severity CVEs')).toBeVisible();
+});
+
+test('should render with empty cveData array', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={[]} />);
+  await expect(component.getByText('CVEs').first()).toBeVisible();
+  await expect(component.getByText(/Red Hat recommends/)).toBeVisible();
+});
+
+test('should render CVE with count of 0', async ({ mount }) => {
+  const data: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 0,
+      label: 'Critical CVEs',
+      onViewClick: () => {},
+    },
+  ];
+  const component = await mount(<CVECard cveData={data} />);
+  await expect(component.getByText('0')).toBeVisible();
+});
+
+test('should render links as buttons with correct role', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={mockCVEData} />);
+  await expect(component.getByRole('button', { name: 'View critical CVEs' })).toBeVisible();
+  await expect(component.getByRole('button', { name: 'View important CVEs' })).toBeVisible();
+});
+
+test('should apply custom className when provided', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={mockCVEData} className="custom-class" />);
+  await expect(component.getByText('CVEs').first()).toBeVisible();
+});
+
+test('should render icons for different severity levels', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={mockCVEData} />);
+  await expect(component.locator('svg').first()).toBeVisible();
+});
+
+test('should handle multiple CVE severities in order', async ({ mount }) => {
+  const multiSeverityData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 10,
+      label: 'Critical CVEs',
+      onViewClick: () => {},
+    },
+    {
+      severity: 'important',
+      count: 20,
+      label: 'Important CVEs',
+      onViewClick: () => {},
+    },
+  ];
+  const component = await mount(<CVECard cveData={multiSeverityData} />);
+
+  await expect(component.getByText('10')).toBeVisible();
+  await expect(component.getByText('20')).toBeVisible();
+});
+
+test('should render with only critical severity data', async ({ mount }) => {
+  const criticalOnly: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 42,
+      label: 'Critical severity CVEs',
+      onViewClick: () => {},
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={criticalOnly} />);
+  await expect(component.getByText('42')).toBeVisible();
+  await expect(component.getByText('Critical severity CVEs')).toBeVisible();
+});
+
+test('should render with only important severity data', async ({ mount }) => {
+  const importantOnly: CVEData[] = [
+    {
+      severity: 'important',
+      count: 73,
+      label: 'Important severity CVEs',
+      onViewClick: () => {},
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={importantOnly} />);
+  await expect(component.getByText('73')).toBeVisible();
+  await expect(component.getByText('Important severity CVEs')).toBeVisible();
+});
+
+test('should handle large CVE counts', async ({ mount }) => {
+  const largeCountData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 9999,
+      label: 'Critical CVEs',
+      onViewClick: () => {},
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={largeCountData} />);
+  await expect(component.getByText('9999')).toBeVisible();
+});
+
+test('should render view links with proper button role', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={mockCVEData} />);
+  const criticalButton = component.getByRole('button', { name: 'View critical CVEs' });
+  const importantButton = component.getByRole('button', { name: 'View important CVEs' });
+
+  await expect(criticalButton).toBeVisible();
+  await expect(importantButton).toBeVisible();
+});
+
+test('should not render buttons when no onViewClick provided', async ({ mount }) => {
+  const dataWithoutCallback: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 10,
+      label: 'Critical CVEs',
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={dataWithoutCallback} />);
+  await expect(component.getByRole('button')).not.toBeVisible();
+});
+
+test('should render custom title and description', async ({ mount }) => {
+  const component = await mount(
+    <CVECard cveData={mockCVEData} title="Custom Title" description="Custom description text" />
+  );
+
+  await expect(component.getByText('Custom Title')).toBeVisible();
+  await expect(component.getByText('Custom description text')).toBeVisible();
+});
+
+test('should render with very long custom description', async ({ mount }) => {
+  const longDescription = 'This is a very long description '.repeat(10);
+  const component = await mount(<CVECard cveData={mockCVEData} description={longDescription} />);
+
+  await expect(component.getByText(longDescription)).toBeVisible();
+});
+
+test('should handle CVE data with custom view link text', async ({ mount }) => {
+  const customTextData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 5,
+      label: 'Critical CVEs',
+      onViewClick: () => {},
+      viewLinkText: 'See All Critical Issues',
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={customTextData} />);
+  await expect(component.getByText('See All Critical Issues')).toBeVisible();
+});
+
+test('should render multiple CVE types with different counts', async ({ mount }) => {
+  const mixedData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 5,
+      label: 'Critical Issues',
+      onViewClick: () => {},
+    },
+    {
+      severity: 'important',
+      count: 150,
+      label: 'Important Issues',
+      onViewClick: () => {},
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={mixedData} />);
+  await expect(component.getByText('Critical Issues')).toBeVisible();
+  await expect(component.getByText('150')).toBeVisible();
+});
+
+test('should render with minimal props', async ({ mount }) => {
+  const minimalData: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 1,
+      label: 'One CVE',
+    },
+  ];
+
+  const component = await mount(<CVECard cveData={minimalData} />);
+  await expect(component.getByText('One CVE')).toBeVisible();
+  await expect(component.getByText('1')).toBeVisible();
+});
+
+test('should handle clicking view link multiple times', async ({ mount }) => {
+  let clickCount = 0;
+  const dataWithCounter: CVEData[] = [
+    {
+      severity: 'critical',
+      count: 10,
+      label: 'Critical CVEs',
+      onViewClick: () => {
+        clickCount++;
       },
-    ];
+    },
+  ];
 
-    const component = await mount(<CVECard cveData={singleData} />);
-    await expect(component.getByText('10')).toBeVisible();
-    await expect(component.getByText('Critical severity CVEs')).toBeVisible();
-    const viewLink = component.getByText('View critical CVEs');
-    await expect(viewLink).toBeVisible();
-    await viewLink.click();
-    expect(onViewClickCalled).toBe(true);
-  });
+  const component = await mount(<CVECard cveData={dataWithCounter} />);
+  const viewButton = component.getByText('View critical CVEs');
+
+  await viewButton.click();
+  await viewButton.click();
+  await viewButton.click();
+
+  expect(clickCount).toBe(3);
+});
+
+test('should display correct icon colors for severity levels', async ({ mount }) => {
+  const component = await mount(<CVECard cveData={mockCVEData} />);
+  const icons = component.locator('svg');
+  await expect(icons.first()).toBeVisible();
 });

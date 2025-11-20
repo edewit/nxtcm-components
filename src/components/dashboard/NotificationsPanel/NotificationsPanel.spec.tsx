@@ -223,4 +223,231 @@ test.describe('NotificationsPanel', () => {
       await expect(component.getByRole('button', { name: /Previous page/i })).not.toBeVisible();
     });
   });
+
+  test('should render column headers', async ({ mount }) => {
+    const component = await mount(<NotificationsPanel notifications={mockNotifications} />);
+
+    await expect(component.getByRole('columnheader', { name: 'Notification' })).toBeVisible();
+    await expect(component.getByRole('columnheader', { name: 'Type' })).toBeVisible();
+    await expect(component.getByRole('columnheader', { name: 'Time' })).toBeVisible();
+  });
+
+  test('should display empty state when no notifications', async ({ mount }) => {
+    const component = await mount(<NotificationsPanel notifications={[]} />);
+
+    await expect(component.getByText('No notifications found')).toBeVisible();
+  });
+
+  test('should render notification types correctly', async ({ mount }) => {
+    const component = await mount(
+      <NotificationsPanel notifications={mockNotifications} enablePagination={false} />
+    );
+
+    await expect(component.getByRole('gridcell', { name: 'Advisor', exact: true })).toBeVisible();
+    await expect(
+      component.getByRole('gridcell', { name: 'Update risks', exact: true })
+    ).toBeVisible();
+    await expect(component.getByRole('gridcell', { name: 'Status', exact: true })).toBeVisible();
+  });
+
+  test('should render notification times correctly', async ({ mount }) => {
+    const component = await mount(
+      <NotificationsPanel notifications={mockNotifications} enablePagination={false} />
+    );
+
+    const timeElements = component.getByText('Nov. 28 12:09 UTC');
+    await expect(timeElements.first()).toBeVisible();
+  });
+
+  test('should call both onClick handlers when both are provided', async ({ mount }) => {
+    let itemClickCalled = false;
+    let panelClickCalled = false;
+
+    const notificationsWithHandler: NotificationItem[] = [
+      {
+        id: 1,
+        title: 'Test Notification',
+        type: 'Security',
+        time: 'Now',
+        onClick: () => {
+          itemClickCalled = true;
+        },
+      },
+    ];
+
+    const onNotificationClick = () => {
+      panelClickCalled = true;
+    };
+
+    const component = await mount(
+      <NotificationsPanel
+        notifications={notificationsWithHandler}
+        onNotificationClick={onNotificationClick}
+      />
+    );
+
+    await component.getByText('Test Notification').click();
+
+    expect(itemClickCalled).toBe(true);
+    expect(panelClickCalled).toBe(true);
+  });
+
+  test('should render with different notification types', async ({ mount }) => {
+    const mixedTypes: NotificationItem[] = [
+      { id: 1, title: 'Security Alert', type: 'Security', time: 'Now' },
+      { id: 2, title: 'Advisor Tip', type: 'Advisor', time: 'Now' },
+      { id: 3, title: 'Risk Update', type: 'Update risks', time: 'Now' },
+      { id: 4, title: 'Status Change', type: 'Status', time: 'Now' },
+    ];
+
+    const component = await mount(
+      <NotificationsPanel notifications={mixedTypes} enablePagination={false} />
+    );
+
+    await expect(component.getByRole('gridcell', { name: 'Security', exact: true })).toBeVisible();
+    await expect(component.getByRole('gridcell', { name: 'Advisor', exact: true })).toBeVisible();
+    await expect(
+      component.getByRole('gridcell', { name: 'Update risks', exact: true })
+    ).toBeVisible();
+    await expect(component.getByRole('gridcell', { name: 'Status', exact: true })).toBeVisible();
+  });
+
+  test('should handle notification with long title', async ({ mount }) => {
+    const longTitleNotification: NotificationItem[] = [
+      {
+        id: 1,
+        title: 'This is a very long notification title that should still be displayed correctly',
+        type: 'Security',
+        time: 'Now',
+      },
+    ];
+
+    const component = await mount(<NotificationsPanel notifications={longTitleNotification} />);
+    await expect(
+      component.getByText(
+        'This is a very long notification title that should still be displayed correctly'
+      )
+    ).toBeVisible();
+  });
+
+  test('should handle notification with special characters in title', async ({ mount }) => {
+    const specialChars: NotificationItem[] = [
+      {
+        id: 1,
+        title: 'CVE-2023-0001: Critical <script> vulnerability',
+        type: 'Security',
+        time: 'Now',
+      },
+    ];
+
+    const component = await mount(<NotificationsPanel notifications={specialChars} />);
+    await expect(
+      component.getByText('CVE-2023-0001: Critical <script> vulnerability')
+    ).toBeVisible();
+  });
+
+  test('should reset to first page when new notifications are loaded', async ({ mount }) => {
+    const manyNotifications: NotificationItem[] = Array.from({ length: 20 }, (_, i) => ({
+      id: i + 1,
+      title: `Notification ${i + 1}`,
+      type: 'Security',
+      time: 'Now',
+    }));
+
+    const component = await mount(
+      <NotificationsPanel
+        notifications={manyNotifications}
+        enablePagination={true}
+        itemsPerPage={6}
+      />
+    );
+
+    await component.getByRole('button', { name: /Next page/i }).click();
+    await expect(component.getByText('Notification 7')).toBeVisible();
+  });
+
+  test('should render correctly with string IDs', async ({ mount }) => {
+    const stringIdNotifications: NotificationItem[] = [
+      { id: 'notification-1', title: 'First', type: 'Security', time: 'Now' },
+      { id: 'notification-2', title: 'Second', type: 'Advisor', time: 'Now' },
+    ];
+
+    const component = await mount(
+      <NotificationsPanel notifications={stringIdNotifications} enablePagination={false} />
+    );
+
+    await expect(component.getByText('First')).toBeVisible();
+    await expect(component.getByText('Second')).toBeVisible();
+  });
+
+  test('should handle edge case with exactly itemsPerPage notifications', async ({ mount }) => {
+    const exactCount: NotificationItem[] = Array.from({ length: 6 }, (_, i) => ({
+      id: i + 1,
+      title: `Notification ${i + 1}`,
+      type: 'Security',
+      time: 'Now',
+    }));
+
+    const component = await mount(
+      <NotificationsPanel notifications={exactCount} enablePagination={true} itemsPerPage={6} />
+    );
+
+    await expect(component.getByRole('button', { name: /Next page/i })).not.toBeVisible();
+  });
+
+  test('should display correct count with zero notifications', async ({ mount }) => {
+    const component = await mount(<NotificationsPanel notifications={[]} />);
+    await expect(component.getByText('0')).toBeVisible();
+  });
+
+  test('should handle clicking same notification multiple times', async ({ mount }) => {
+    let clickCount = 0;
+    const notification: NotificationItem[] = [
+      {
+        id: 1,
+        title: 'Test',
+        type: 'Security',
+        time: 'Now',
+        onClick: () => {
+          clickCount++;
+        },
+      },
+    ];
+
+    const component = await mount(<NotificationsPanel notifications={notification} />);
+
+    await component.getByText('Test').click();
+    await component.getByText('Test').click();
+    await component.getByText('Test').click();
+
+    expect(clickCount).toBe(3);
+  });
+
+  test('should render bell icon in header', async ({ mount }) => {
+    const component = await mount(<NotificationsPanel notifications={mockNotifications} />);
+    const bellIcon = component.locator('svg').first();
+    await expect(bellIcon).toBeVisible();
+  });
+
+  test('should render table structure correctly', async ({ mount }) => {
+    const component = await mount(<NotificationsPanel notifications={mockNotifications} />);
+    const table = component.locator('table');
+    await expect(table).toBeVisible();
+  });
+
+  test('should handle notifications with time in different formats', async ({ mount }) => {
+    const differentTimes: NotificationItem[] = [
+      { id: 1, title: 'Recent', type: 'Security', time: 'Just now' },
+      { id: 2, title: 'Minutes ago', type: 'Security', time: '5 minutes ago' },
+      { id: 3, title: 'Full date', type: 'Security', time: '2024-01-15 10:30 UTC' },
+    ];
+
+    const component = await mount(
+      <NotificationsPanel notifications={differentTimes} enablePagination={false} />
+    );
+
+    await expect(component.getByText('Just now')).toBeVisible();
+    await expect(component.getByText('5 minutes ago')).toBeVisible();
+    await expect(component.getByText('2024-01-15 10:30 UTC')).toBeVisible();
+  });
 });

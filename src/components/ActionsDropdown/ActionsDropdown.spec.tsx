@@ -262,11 +262,9 @@ test.describe('ActionsDropdown', () => {
         </TranslationProvider>
       );
 
-      // Check that the button is visible
       const button = component.getByRole('button');
       await expect(button).toBeVisible();
 
-      // Verify translation function was called
       expect(translationCalled).toBe(true);
       expect(translatedValue).toBe('Acciones');
     });
@@ -295,8 +293,280 @@ test.describe('ActionsDropdown', () => {
       const button = component.getByRole('button', { name: /Custom Label/i });
       await expect(button).toBeVisible();
       await expect(button).toHaveAttribute('aria-label', 'Custom Label');
-      // Translation should not be called when kebabAriaLabel is provided
       expect(translationCalled).toBe(false);
+    });
+  });
+
+  test.describe('additional features and edge cases', () => {
+    test('should render menu items with descriptions', async ({ mount }) => {
+      const itemsWithDescriptions: DropdownItem<string>[] = [
+        { id: 'item1', text: 'Action One', description: 'This is the first action' },
+        { id: 'item2', text: 'Action Two', description: 'This is the second action' },
+      ];
+
+      const component = await mount(
+        <ActionsDropdown
+          id="test-descriptions"
+          dropdownItems={itemsWithDescriptions}
+          text="Actions"
+        />
+      );
+
+      await component.getByRole('button', { name: /Actions/i }).click();
+      await expect(component.getByText('This is the first action')).toBeVisible();
+      await expect(component.getByText('This is the second action')).toBeVisible();
+    });
+
+    test('should render menu items with isSelected state', async ({ mount }) => {
+      const itemsWithSelection: DropdownItem<string>[] = [
+        { id: 'item1', text: 'Item One', isSelected: true },
+        { id: 'item2', text: 'Item Two', isSelected: false },
+      ];
+
+      const component = await mount(
+        <ActionsDropdown id="test-selected" dropdownItems={itemsWithSelection} text="Select" />
+      );
+
+      await component.getByRole('button', { name: /Select/i }).click();
+      const selectedItem = component.getByRole('menuitem', { name: /Item One/i });
+      await expect(selectedItem).toBeVisible();
+    });
+
+    test('should handle isAriaDisabled items', async ({ mount }) => {
+      const itemsWithAriaDisabled: DropdownItem<string>[] = [
+        { id: 'item1', text: 'Normal Item' },
+        { id: 'item2', text: 'Aria Disabled Item', isAriaDisabled: true },
+      ];
+
+      let selectCallCount = 0;
+      const onSelectMock = () => {
+        selectCallCount++;
+      };
+
+      const component = await mount(
+        <ActionsDropdown
+          id="test-aria-disabled"
+          dropdownItems={itemsWithAriaDisabled}
+          text="Test"
+          onSelect={onSelectMock}
+        />
+      );
+
+      await component.getByRole('button', { name: /Test/i }).click();
+      const disabledItem = component.getByRole('menuitem', { name: /Aria Disabled Item/i });
+      await expect(disabledItem).toHaveAttribute('aria-disabled', 'true');
+
+      await disabledItem.click({ force: true });
+      expect(selectCallCount).toBe(0);
+    });
+
+    test('should render separators correctly', async ({ mount }) => {
+      const itemsWithSeparator: DropdownItem<string>[] = [
+        { id: 'item1', text: 'Group One Item' },
+        { id: 'item2', text: 'Group Two Item', separator: true },
+        { id: 'item3', text: 'Another Group Two Item' },
+      ];
+
+      const component = await mount(
+        <ActionsDropdown id="test-separator" dropdownItems={itemsWithSeparator} text="Groups" />
+      );
+
+      await component.getByRole('button', { name: /Groups/i }).click();
+      await expect(component.getByText('Group One Item')).toBeVisible();
+      await expect(
+        component.getByRole('menuitem', { name: 'Group Two Item', exact: true })
+      ).toBeVisible();
+    });
+
+    test('should render with isPlain variant', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown id="test-plain" dropdownItems={mockItems} text="Plain Dropdown" isPlain />
+      );
+
+      const button = component.getByRole('button', { name: /Plain Dropdown/i });
+      await expect(button).toBeVisible();
+    });
+
+    test('should render with isPrimary variant', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown
+          id="test-primary"
+          dropdownItems={mockItems}
+          text="Primary Dropdown"
+          isPrimary
+        />
+      );
+
+      const button = component.getByRole('button', { name: /Primary Dropdown/i });
+      await expect(button).toBeVisible();
+    });
+
+    test('should call onToggle callback when menu opens and closes', async ({ mount }) => {
+      let toggleState: boolean | undefined;
+      const onToggleMock = (isOpen?: boolean) => {
+        toggleState = isOpen;
+      };
+
+      const component = await mount(
+        <ActionsDropdown
+          id="test-on-toggle"
+          dropdownItems={mockItems}
+          text="Toggle Test"
+          onToggle={onToggleMock}
+        />
+      );
+
+      const button = component.getByRole('button', { name: /Toggle Test/i });
+      await button.click();
+      expect(toggleState).toBe(true);
+
+      await button.click();
+      expect(toggleState).toBe(false);
+    });
+
+    test('should call onHover when mouse hovers over toggle', async ({ mount }) => {
+      let hoverCalled = false;
+      const onHoverMock = () => {
+        hoverCalled = true;
+      };
+
+      const component = await mount(
+        <ActionsDropdown
+          id="test-hover"
+          dropdownItems={mockItems}
+          text="Hover Test"
+          onHover={onHoverMock}
+        />
+      );
+
+      const button = component.getByRole('button', { name: /Hover Test/i });
+      await button.hover();
+
+      expect(hoverCalled).toBe(true);
+    });
+
+    test('should handle empty dropdown items array', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown id="test-empty" dropdownItems={[]} text="Empty" />
+      );
+
+      const button = component.getByRole('button', { name: /Empty/i });
+      await expect(button).toBeVisible();
+      await button.click();
+    });
+
+    test('should handle single item in dropdown', async ({ mount }) => {
+      const singleItem: DropdownItem<string>[] = [{ id: 'only', text: 'Only Item' }];
+
+      const component = await mount(
+        <ActionsDropdown id="test-single" dropdownItems={singleItem} text="Single" />
+      );
+
+      await component.getByRole('button', { name: /Single/i }).click();
+      await expect(component.getByText('Only Item')).toBeVisible();
+    });
+
+    test('should handle nested flyout menus', async ({ mount }) => {
+      const nestedItems: DropdownItem<string>[] = [
+        {
+          id: 'parent',
+          text: 'Parent Menu',
+          flyoutMenu: [
+            {
+              id: 'child',
+              text: 'Child Menu',
+              flyoutMenu: [{ id: 'grandchild', text: 'Grandchild Item' }],
+            },
+          ],
+        },
+      ];
+
+      const component = await mount(
+        <ActionsDropdown id="test-nested" dropdownItems={nestedItems} text="Nested" />
+      );
+
+      await component.getByRole('button', { name: /Nested/i }).click();
+      await component.getByText('Parent Menu').hover();
+      await expect(component.getByText('Child Menu')).toBeVisible();
+    });
+
+    test('should call both onSelect callbacks when available', async ({ mount }) => {
+      let globalSelectId: string | undefined;
+      let itemSelectCalled = false;
+
+      const itemsWithBoth: DropdownItem<string>[] = [
+        {
+          id: 'item1',
+          text: 'Item One',
+          onSelect: () => {
+            itemSelectCalled = true;
+          },
+        },
+      ];
+
+      const component = await mount(
+        <ActionsDropdown
+          id="test-both"
+          dropdownItems={itemsWithBoth}
+          text="Both Callbacks"
+          onSelect={(id) => {
+            globalSelectId = id;
+          }}
+        />
+      );
+
+      await component.getByRole('button', { name: /Both Callbacks/i }).click();
+      await component.getByText('Item One').click();
+
+      expect(itemSelectCalled).toBe(true);
+      expect(globalSelectId).toBe('item1');
+    });
+
+    test('should remain open when disabled item is clicked', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown id="test-remain-open" dropdownItems={mockItems} text="Test" />
+      );
+
+      await component.getByRole('button', { name: /Test/i }).click();
+      await expect(component.getByText('Item Two')).toBeVisible();
+
+      const disabledItem = component.getByRole('menuitem', { name: /Item Two/i });
+      await disabledItem.click({ force: true });
+
+      await expect(component.getByText('Item Two')).toBeVisible();
+    });
+
+    test('should handle rapid toggle clicks', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown id="test-rapid" dropdownItems={mockItems} text="Rapid" />
+      );
+
+      const button = component.getByRole('button', { name: /Rapid/i });
+
+      await button.click();
+      await expect(component.getByText('Item One')).toBeVisible();
+
+      await button.click();
+      await expect(component.getByText('Item One')).not.toBeVisible();
+
+      await button.click();
+      await expect(component.getByText('Item One')).toBeVisible();
+    });
+
+    test('should keep menu closed when disabled toggle is clicked', async ({ mount }) => {
+      const component = await mount(
+        <ActionsDropdown
+          id="test-disabled-toggle"
+          dropdownItems={mockItems}
+          text="Disabled"
+          isDisabled
+        />
+      );
+
+      const button = component.getByRole('button', { name: /Disabled/i });
+      await button.click({ force: true });
+
+      await expect(component.getByText('Item One')).not.toBeVisible();
     });
   });
 });

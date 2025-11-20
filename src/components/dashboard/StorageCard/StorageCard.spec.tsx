@@ -10,18 +10,18 @@ const mockStorageData: StorageCardProps['storageData'] = {
 };
 
 test.describe('StorageCard', () => {
-  test('renders the component with correct title', async ({ mount }) => {
+  test('should render the component with correct title', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByTestId('header')).toContainText('Storage');
   });
 
-  test('displays the total storage used', async ({ mount }) => {
+  test('should display the total storage used', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     const totalUsed = (63.02 + 2.17 + 2.17).toFixed(2);
     await expect(component.getByTestId('total-used')).toContainText(`${totalUsed} TiB`);
   });
 
-  test('displays the correct usage percentage', async ({ mount }) => {
+  test('should display the correct usage percentage', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     const totalUsed = 63.02 + 2.17 + 2.17;
     const totalStorage = totalUsed + 21.89;
@@ -29,32 +29,32 @@ test.describe('StorageCard', () => {
     await expect(component.getByTestId('percentage')).toContainText(`${percentage}%`);
   });
 
-  test('displays ROSA clusters storage', async ({ mount }) => {
+  test('should display ROSA clusters storage', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByTestId('rosa-clusters')).toContainText('63.02 TiB');
   });
 
-  test('displays ARO clusters storage', async ({ mount }) => {
+  test('should display ARO clusters storage', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByTestId('aro-clusters')).toContainText('2.17 TiB');
   });
 
-  test('displays OSD clusters storage', async ({ mount }) => {
+  test('should display OSD clusters storage', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByTestId('osd-clusters')).toContainText('2.17 TiB');
   });
 
-  test('displays available storage', async ({ mount }) => {
+  test('should display available storage', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByTestId('available')).toContainText('21.89 TiB');
   });
 
-  test('does not show "View more" button when onViewMore is not provided', async ({ mount }) => {
+  test('should not show "View more" button when onViewMore is not provided', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByText('View more')).not.toBeVisible();
   });
 
-  test('shows "View more" button when onViewMore callback is provided', async ({ mount }) => {
+  test('should show "View more" button when onViewMore callback is provided', async ({ mount }) => {
     let handleViewMoreCalled = false;
     const handleViewMore = () => {
       handleViewMoreCalled = true;
@@ -68,7 +68,7 @@ test.describe('StorageCard', () => {
     expect(handleViewMoreCalled).toBe(true);
   });
 
-  test('calculates percentage correctly for high usage', async ({ mount }) => {
+  test('should calculate percentage correctly for high usage', async ({ mount }) => {
     const highUsageData = {
       rosaClusters: 80.5,
       aroClusters: 10.2,
@@ -84,7 +84,7 @@ test.describe('StorageCard', () => {
     await expect(component.getByTestId('percentage')).toContainText(`${percentage}%`);
   });
 
-  test('calculates percentage correctly for low usage', async ({ mount }) => {
+  test('should calculate percentage correctly for low usage', async ({ mount }) => {
     const lowUsageData = {
       rosaClusters: 10.5,
       aroClusters: 5.2,
@@ -100,7 +100,7 @@ test.describe('StorageCard', () => {
     await expect(component.getByTestId('percentage')).toContainText(`${percentage}%`);
   });
 
-  test('displays formatted numbers with two decimal places', async ({ mount }) => {
+  test('should display formatted numbers with two decimal places', async ({ mount }) => {
     const preciseData = {
       rosaClusters: 123.456,
       aroClusters: 45.678,
@@ -115,7 +115,7 @@ test.describe('StorageCard', () => {
     await expect(component.getByTestId('available')).toContainText('67.89 TiB');
   });
 
-  test('renders SVG circular progress indicator', async ({ mount, page }) => {
+  test('should render SVG circular progress indicator', async ({ mount, page }) => {
     await mount(<StorageCard storageData={mockStorageData} />);
     const svgElement = page.locator('svg');
     await expect(svgElement).toBeVisible();
@@ -123,7 +123,7 @@ test.describe('StorageCard', () => {
     await expect(svgElement).toHaveAttribute('height', '200');
   });
 
-  test('displays total storage label correctly', async ({ mount }) => {
+  test('should display total storage label correctly', async ({ mount }) => {
     const component = await mount(<StorageCard storageData={mockStorageData} />);
     await expect(component.getByText('Total storage used')).toBeVisible();
   });
