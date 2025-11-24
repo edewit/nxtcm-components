@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useItem, useData } from '@patternfly-labs/react-form-wizard';
-import YAML from 'yaml';
 import { Alert, AlertVariant, Stack, StackItem, Title } from '@patternfly/react-core';
 import { YamlCodeEditor } from '../../../YamlCodeEditor/YamlCodeEditor';
+import { parseYaml, objectToYaml } from '../../../YamlCodeEditor/yamlUtils';
 
 export const YamlEditorStep = () => {
   const data = useItem();
@@ -12,7 +12,7 @@ export const YamlEditorStep = () => {
 
   useEffect(() => {
     try {
-      const yamlString = YAML.stringify(data);
+      const yamlString = objectToYaml(data);
       setYamlContent(yamlString);
       setParseError('');
     } catch (err) {
@@ -23,12 +23,12 @@ export const YamlEditorStep = () => {
   const handleYamlChange = (newYaml: string) => {
     setYamlContent(newYaml);
 
-    try {
-      const parsedData = YAML.parse(newYaml);
-      update(parsedData);
+    const result = parseYaml(newYaml);
+    if (result.isValid && result.data !== undefined) {
+      update(result.data);
       setParseError('');
-    } catch (err: any) {
-      setParseError(err?.message || 'Invalid YAML syntax');
+    } else {
+      setParseError(result.error || 'Invalid YAML syntax');
     }
   };
 
@@ -54,8 +54,6 @@ export const YamlEditorStep = () => {
           code={yamlContent}
           onChange={handleYamlChange}
           height="600px"
-          isReadOnly={false}
-          isLineNumbersVisible={true}
           aria-label="Cluster configuration YAML editor"
         />
       </StackItem>
