@@ -34,12 +34,9 @@ export default defineConfig({
       external: [
         'react',
         'react-dom',
-        '@patternfly/react-core',
-        '@patternfly/react-icons',
-        '@patternfly/react-styles',
-        '@patternfly/patternfly',
-        '@patternfly/react-component-groups',
         /^@patternfly\/.*/,
+        'js-yaml',
+        'yaml',
       ],
       output: {
         // Provide global variables to use in the UMD build for externalized deps
