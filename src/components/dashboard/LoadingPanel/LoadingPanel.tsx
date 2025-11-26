@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 type LoadingPanelProps<T> = {
   callback: () => Promise<T>;
-  children: () => (props: { data: T | null; error: Error | null }) => React.ReactNode;
+  children: (props: { data: T | null; error: Error | null }) => React.ReactNode;
 };
 export function LoadingPanel<T>({ callback, children }: LoadingPanelProps<T>) {
   const [data, setData] = useState<T | null>(null);
@@ -22,5 +22,5 @@ export function LoadingPanel<T>({ callback, children }: LoadingPanelProps<T>) {
     return <Spinner size="lg" aria-label="Loading..." className="pf-v6-u-ma-md" />;
   }
 
-  return children()({ data, error });
+  return children({ data, error });
 }

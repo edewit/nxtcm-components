@@ -42,33 +42,31 @@ export const SuccessWithData: Story = {
         email: 'john.doe@example.com',
       } as UserData;
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (data && !('id' in data)) {
-          return <div>No data available</div>;
-        }
-        if (error) {
-          return <div style={{ color: 'red' }}>Error: {error.message}</div>;
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return (
-          <div>
-            <h3>User Profile</h3>
-            <p>
-              <strong>ID:</strong> {data?.id}
-            </p>
-            <p>
-              <strong>Name:</strong> {data?.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {data?.email}
-            </p>
-          </div>
-        );
-      },
+    children: ({ data, error }) => {
+      if (data && !('id' in data)) {
+        return <div>No data available</div>;
+      }
+      if (error) {
+        return <div style={{ color: 'red' }}>Error: {error.message}</div>;
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return (
+        <div>
+          <h3>User Profile</h3>
+          <p>
+            <strong>ID:</strong> {data?.id}
+          </p>
+          <p>
+            <strong>Name:</strong> {data?.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {data?.email}
+          </p>
+        </div>
+      );
+    },
   },
 };
 
@@ -79,22 +77,20 @@ export const ErrorState: Story = {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       throw new Error('Failed to fetch user data');
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (error) {
-          return (
-            <div style={{ color: 'red', padding: '1rem' }}>
-              <h3>Error occurred</h3>
-              <p>{error.message}</p>
-            </div>
-          );
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return <div>Data: {JSON.stringify(data)}</div>;
-      },
+    children: ({ data, error }) => {
+      if (error) {
+        return (
+          <div style={{ color: 'red', padding: '1rem' }}>
+            <h3>Error occurred</h3>
+            <p>{error.message}</p>
+          </div>
+        );
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return <div>Data: {JSON.stringify(data)}</div>;
+    },
   },
 };
 
@@ -108,33 +104,31 @@ export const QuickSuccess: Story = {
         email: 'jane.smith@example.com',
       } as UserData;
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (data && !('id' in data)) {
-          return <div>Invalid data type</div>;
-        }
-        if (error) {
-          return <div style={{ color: 'red' }}>Error: {error.message}</div>;
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return (
-          <div>
-            <h3>User Profile</h3>
-            <p>
-              <strong>ID:</strong> {data.id}
-            </p>
-            <p>
-              <strong>Name:</strong> {data.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {data.email}
-            </p>
-          </div>
-        );
-      },
+    children: ({ data, error }) => {
+      if (data && !('id' in data)) {
+        return <div>Invalid data type</div>;
+      }
+      if (error) {
+        return <div style={{ color: 'red' }}>Error: {error.message}</div>;
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return (
+        <div>
+          <h3>User Profile</h3>
+          <p>
+            <strong>ID:</strong> {data.id}
+          </p>
+          <p>
+            <strong>Name:</strong> {data.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {data.email}
+          </p>
+        </div>
+      );
+    },
   },
 };
 
@@ -149,29 +143,27 @@ export const WithArrayData: Story = {
         { id: 3, name: 'Item 3' },
       ];
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (data && !Array.isArray(data)) {
-          return <div>Invalid data type</div>;
-        }
-        if (error) {
-          return <div style={{ color: 'red' }}>Error: {error.message}</div>;
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return (
-          <div>
-            <h3>Items List</h3>
-            <ul>
-              {data.map((item: { id: number; name: string }) => (
-                <li key={item.id}>{item.name}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      },
+    children: ({ data, error }) => {
+      if (data && !Array.isArray(data)) {
+        return <div>Invalid data type</div>;
+      }
+      if (error) {
+        return <div style={{ color: 'red' }}>Error: {error.message}</div>;
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return (
+        <div>
+          <h3>Items List</h3>
+          <ul>
+            {data.map((item: { id: number; name: string }) => (
+              <li key={item.id}>{item.name}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    },
   },
 };
 
@@ -185,29 +177,27 @@ export const WithApiResponse: Story = {
         message: 'Data loaded successfully',
       } as ApiResponse;
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (data && !('status' in data)) {
-          return <div>Invalid data type</div>;
-        }
-        if (error) {
-          return <div style={{ color: 'red' }}>Error: {error.message}</div>;
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return (
-          <div>
-            <p>
-              <strong>Status:</strong> {data.status}
-            </p>
-            <p>
-              <strong>Message:</strong> {data.message}
-            </p>
-          </div>
-        );
-      },
+    children: ({ data, error }) => {
+      if (data && !('status' in data)) {
+        return <div>Invalid data type</div>;
+      }
+      if (error) {
+        return <div style={{ color: 'red' }}>Error: {error.message}</div>;
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return (
+        <div>
+          <p>
+            <strong>Status:</strong> {data.status}
+          </p>
+          <p>
+            <strong>Message:</strong> {data.message}
+          </p>
+        </div>
+      );
+    },
   },
 };
 
@@ -222,32 +212,30 @@ export const LongLoading: Story = {
         email: 'slow@example.com',
       } as UserData;
     },
-    children:
-      () =>
-      ({ data, error }) => {
-        if (data && !('id' in data)) {
-          return <div>Invalid data type</div>;
-        }
-        if (error) {
-          return <div style={{ color: 'red' }}>Error: {error.message}</div>;
-        }
-        if (!data) {
-          return <div>No data available</div>;
-        }
-        return (
-          <div>
-            <h3>User Profile</h3>
-            <p>
-              <strong>ID:</strong> {data.id}
-            </p>
-            <p>
-              <strong>Name:</strong> {data.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {data.email}
-            </p>
-          </div>
-        );
-      },
+    children: ({ data, error }) => {
+      if (data && !('id' in data)) {
+        return <div>Invalid data type</div>;
+      }
+      if (error) {
+        return <div style={{ color: 'red' }}>Error: {error.message}</div>;
+      }
+      if (!data) {
+        return <div>No data available</div>;
+      }
+      return (
+        <div>
+          <h3>User Profile</h3>
+          <p>
+            <strong>ID:</strong> {data.id}
+          </p>
+          <p>
+            <strong>Name:</strong> {data.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {data.email}
+          </p>
+        </div>
+      );
+    },
   },
 };

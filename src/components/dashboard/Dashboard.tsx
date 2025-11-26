@@ -74,13 +74,12 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<CVEData[]> callback={cveCard.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return <CVECard cveData={data} />;
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return <CVECard cveData={data} />;
+        }}
       </LoadingPanel>
     ),
   },
@@ -92,19 +91,18 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<ClusterRecommendationsData> callback={clusterRecommendations.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return (
-              <ClusterRecommendations
-                {...data}
-                onViewRecommendations={clusterRecommendations.onViewRecommendations}
-                onCategoryClick={clusterRecommendations.onCategoryClick}
-              />
-            );
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return (
+            <ClusterRecommendations
+              {...data}
+              onViewRecommendations={clusterRecommendations.onViewRecommendations}
+              onCategoryClick={clusterRecommendations.onCategoryClick}
+            />
+          );
+        }}
       </LoadingPanel>
     ),
   },
@@ -116,15 +114,14 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<SubscriptionsData> callback={subscriptions.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return (
-              <Subscriptions {...data} onViewSubscriptions={subscriptions.onViewSubscriptions} />
-            );
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return (
+            <Subscriptions {...data} onViewSubscriptions={subscriptions.onViewSubscriptions} />
+          );
+        }}
       </LoadingPanel>
     ),
   },
@@ -136,13 +133,12 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<UpgradeRisksProps> callback={updateRisks.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return <UpgradeRisks {...data} onViewRisks={updateRisks.onViewRisks} />;
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return <UpgradeRisks {...data} onViewRisks={updateRisks.onViewRisks} />;
+        }}
       </LoadingPanel>
     ),
   },
@@ -154,13 +150,12 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<StorageData> callback={storage.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return <StorageCard storageData={data} onViewMore={storage.onViewMore} />;
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return <StorageCard storageData={data} onViewMore={storage.onViewMore} />;
+        }}
       </LoadingPanel>
     ),
   },
@@ -172,18 +167,17 @@ const widgetMapping: (props: DashboardProps) => WidgetMapping = ({
     },
     renderWidget: () => (
       <LoadingPanel<NotificationItem[]> callback={notifications.load}>
-        {() =>
-          ({ data, error }) => {
-            if (error || !data) {
-              return <ErrorState bodyText={error?.message || 'Unknown error'} />;
-            }
-            return (
-              <NotificationsPanel
-                notifications={data}
-                onNotificationClick={notifications.onNotificationClick}
-              />
-            );
-          }}
+        {({ data, error }) => {
+          if (error || !data) {
+            return <ErrorState bodyText={error?.message || 'Unknown error'} />;
+          }
+          return (
+            <NotificationsPanel
+              notifications={data}
+              onNotificationClick={notifications.onNotificationClick}
+            />
+          );
+        }}
       </LoadingPanel>
     ),
   },

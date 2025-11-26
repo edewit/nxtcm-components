@@ -10,6 +10,7 @@ export type UpgradeRisksProps = {
   warningCount: number;
   infoCount: number;
   onViewRisks?: () => void;
+  className?: string;
 };
 
 export const UpgradeRisks = ({
