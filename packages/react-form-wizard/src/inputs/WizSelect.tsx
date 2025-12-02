@@ -79,7 +79,7 @@ function WizSelectBase<T = any>(props: SelectProps<T>) {
   const isCreatable = props.isCreatable;
   const [open, setOpen] = useState(false);
 
-  const [filteredOptions, setFilteredOptions] = useState<OptionType<T>[]>([]);
+  const [filteredOptions, setFilteredOptions] = useState<(string | OptionType<T>)[]>([]);
 
   // The drop down items with descriptions - optionally grouped
   const selectOptions: OptionType<T>[] | undefined = useMemo(() => {
@@ -173,6 +173,7 @@ function WizSelectBase<T = any>(props: SelectProps<T>) {
                 isCreatable={isCreatable}
                 onCreate={props.onCreate}
                 footer={props.footer}
+                isMultiSelect={false}
               />
             </PfSelect>
           </InputGroupItem>

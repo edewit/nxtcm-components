@@ -20,8 +20,8 @@ import { Option, OptionType } from './WizSelect';
 type InputSelectProps<T> = {
   disabled?: boolean;
   validated?: 'error';
-  options: OptionType<T>[];
-  setOptions: (options: OptionType<T>[]) => void;
+  options: (OptionType<T> | string)[];
+  setOptions: (options: (OptionType<T> | string)[]) => void;
   placeholder: string;
   value: string;
   onSelect: (value: string | undefined) => void;
@@ -53,7 +53,7 @@ export function InputSelect<T>({
       setOptions([
         ...options.filter((option) =>
           typeof option === 'string' || typeof option === 'number'
-            ? (option as string).toLowerCase().includes(inputValue.toLowerCase())
+            ? option.toString().toLowerCase().includes(inputValue.toLowerCase())
             : (option as Option<T>).label
                 .toString()
                 .toLowerCase()
@@ -92,12 +92,19 @@ export function InputSelect<T>({
   }, []);
 
   const valueString = useCallback(() => {
-    const isSimpleOption = typeof options[0] === 'string' || typeof options[0] === 'number';
+    //can you add a check to see if the options array is a string or number?
+    const isSimpleOption = options.every(
+      (option) => typeof option === 'string' || typeof option === 'number'
+    );
     if (isSimpleOption) {
       return value;
+    } else {
+      return (
+        (options.find((option) => (option as OptionType<T>).value === value) as OptionType<T>)
+          ?.label ?? ''.toString()
+      );
     }
-    return options.find((option) => option.value === value)?.label;
-  }, [value, options]);
+  }, [options, value]);
 
   return (
     <MenuToggle
@@ -148,7 +155,7 @@ export function InputSelect<T>({
 
 type SelectListOptionsProps<T = any> = {
   value: string;
-  options: string[] | OptionType<T>[];
+  options: (string | OptionType<T>)[];
   footer?: ReactNode;
   isCreatable?: boolean;
   onCreate?: (value: string) => void;
